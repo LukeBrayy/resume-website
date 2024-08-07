@@ -1,0 +1,65 @@
+# Dependencies
+node_modules/
+.bower_components/
+
+# Optional npm cache directory
+.npm
+.yarn
+.yarn-integrity
+.pnp.*
+.pnp.js
+
+# Testing
+coverage/
+.nyc_output/
+
+# Production
+build/
+dist/
+
+# Miscellaneous
+.DS_Store
+*.pem
+*.crt
+*.key
+
+# Env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Editor directories and files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Temporary folders
+tmp/
+temp/
+
+# Optional eslint cache
+.eslintcache
+
+# Output of 'npm pack'
+*.tgz
+
+# Jest snapshot directory
+__snapshots__/
+
+# Webstorm project files
+*.iml
+.idea/
+
+# TypeScript
+*.tsbuildinfo
+
+secrets.json*
