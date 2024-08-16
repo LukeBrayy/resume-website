@@ -84,7 +84,7 @@ const ModernResume = () => {
     {
       id: 2,
       title: "Dyslexia-Assistant ChatBot",
-      description: "A demonstration of using AI tools to increase accessibility.",
+      description: "A demonstration of using AI tools to increase accessibility. Demo incoming when I can figure out how to stop it being abused.",
       fullWidth: false,
     },
     {
@@ -98,26 +98,30 @@ const ModernResume = () => {
     {
       id: 4,
       title: "Used Car Market 2022- Various Models",
-      description: "Used car prices were scraped every 5 minutes for several months. The data was cleaned at categorised then visualised in Tableau. View the full visualisation at https://public.tableau.com/app/profile/luke6334/viz/offroad_vehicle_market/Dashboard1",
+      description: "Used car prices were scraped every 5 minutes for several months. The data was cleaned at categorised then visualised in Tableau.",
+      link: "https://public.tableau.com/app/profile/luke6334/viz/offroad_vehicle_market/Dashboard1",
+      linkText: "View full visualisation",
       component: TableauEmbed,
       fullWidth: true,
     },
     {
       id: 5,
       title: "Interactive Node + ReactJS Resume",
-      description: "This webpage! View the source code on GitHub.",
+      description: "This webpage! Automatic deployments on push to main. Hosted with DigitalOcean.",
       fullWidth: false,
+      link: "https://github.com/LukeBrayy/resume-website",
+      linkText: "View on GitHub",
     },
     {
       id: 6,
       title: "Raspberry Pi Smart 12v Car",
-      description: "Using a Raspberry Pi4 a dual 12v battery system and some electronics, I created a remote controllable lighting system for my 4x4. The system is controlled via a web interface or physical toggle buttons.",
+      description: "Using a Raspberry Pi4 a dual 12v battery system and some electronics, I created a remote controllable lighting system for my 4x4. The system is controlled via a web interface or physical toggle buttons. [video incoming!]",
       fullWidth: true,
     },
     {
       id: 7,
       title: "Arduino ESP32 GPS Speedometer",
-      description: "My girlfriend's 1985 Hilux has a dodgy speedo. I used an ESP32 and a GPS module to create a digital speedometer. It has not stopped her getting speeding tickets.",
+      description: "My girlfriend's 1985 Hilux has a dodgy speedo. I used an ESP32 and a GPS module to create a digital speedometer. It has not stopped her getting speeding tickets. [video incoming!]",
       fullWidth: true,
     },
   ];
@@ -134,7 +138,22 @@ const ModernResume = () => {
         <div className={fullWidth ? "" : styles.demoGrid}>
           {filteredDemos.map(demo => (
             <DemoCard key={demo.id} title={demo.title} backgroundColor="bg-gray-900">
-              <p className="text-sm text-blue-200 mb-4">{demo.description}</p>
+              <p className="text-sm text-blue-200 mb-4">
+                {demo.description}
+                {demo.link && demo.linkText && (
+                  <>
+                    {' '}
+                    <a
+                      href={demo.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-400 hover:underline"
+                    >
+                      {demo.linkText}
+                    </a>
+                  </>
+                )}
+              </p>
               {demo.link && demo.image && (
                 <a 
                   href={demo.link} 
