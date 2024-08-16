@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import DemoCard from './DemoCard';
+import TableauEmbed from './TableauEmbed';
+import SkillTags from './SkillTags';
+import { TrainFrontTunnel } from 'lucide-react';
 
 const styles = {
-  container: "min-h-screen bg-gradient-to-br from-blue-700 to-blue-900 text-white p-8 font-['Montserrat',sans-serif]",  content: "max-w-6xl mx-auto",
+  container: "min-h-screen bg-gradient-to-br from-blue-700 to-blue-900 text-white p-8 font-['Montserrat',sans-serif]",
+  content: "max-w-6xl mx-auto",
   header: "text-4xl font-bold mb-8",
   section: "flex flex-col md:flex-row",
   experienceContainer: "w-full md:w-1/2 mb-8 md:mb-0",
@@ -32,6 +36,8 @@ const styles = {
   logoBackground: "bg-white bg-opacity-60",
   demosContainer: "w-full md:w-1/2",
   demosHeader: "text-2xl font-semibold mb-4",
+  fullWidthDemosContainer: "w-full mt-8",
+  fullWidthDemosHeader: "text-2xl font-semibold mb-4",
 };
 
 const colors = [
@@ -66,69 +72,90 @@ const ModernResume = () => {
   const sortedExperiences = [...experiences].sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
   const allItems = [...sortedExperiences, ...events].sort((a, b) => new Date(b.startDate || b.date) - new Date(a.startDate || a.date));
   
-  
-  const Demos = () => {
-    return (
-      <div className={styles.demosContainer}>
-        <h2 className={styles.demosHeader}>Project Demos</h2>
-        <DemoCard title="State Wide Drillhole Assay Search and Display" backgroundColor="bg-blue-900">
-          <p className="text-sm text-blue-200 mb-4">
-            Querying and transforming public data for the Department of Mines. 
-            Hosted for the client providing a stable public service with regular usage.
-          </p>
-          <a 
-            href="https://wamexgeochem.net.au" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="block w-full hover:opacity-80 transition-opacity"
-          >
-            <img 
-              src="/wamexscreen.png" 
-              alt="State Wide Drillhole Assay Search and Display Screenshot" 
-              className="w-full rounded-lg shadow-lg" 
-            />
-          </a>
-        </DemoCard>
-        <DemoCard title="Dylexia-Assistant ChatBot" backgroundColor="bg-gray-900">
-          <p className="text-sm text-blue-200">
-            A demonstration of natural language processing capabilities.
-          </p>
-          {/* Add your chat bot demo here */}
-        </DemoCard>
-        <DemoCard title="Custom Massive Text Search Engine" backgroundColor="bg-gray-900">
-          <p className="text-sm text-blue-200 mb-4">
-            Hosting a public service search engine, querying 200,000+ mineral exploration reports in milliseconds.
-          </p>
-          <a 
-            href="https://wamexsearch.net.au" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="block w-full hover:opacity-80 transition-opacity"
-          >
-            <img 
-              src="/searchscreen.png" 
-              alt="WamexSearch.net.au Screenshot" 
-              className="w-full rounded-lg shadow-lg" 
-            />
-          </a>
-        </DemoCard>
-        <DemoCard title="3D Model Viewer">
-          <p className="text-sm text-blue-200">
-          An interactive chart showcasing data analysis skills.
-          </p>
-          {/* Add your 3D model viewer here */}
-        </DemoCard>
+  const demos = [
+    {
+      id: 1,
+      title: "State Wide Drillhole Assay Search and Display",
+      description: "Querying and transforming public data for the Department of Mines. Hosted for the client providing a stable public service with regular usage.",
+      link: "https://wamexgeochem.net.au",
+      image: "/wamexscreen.png",
+      fullWidth: false,
+    },
+    {
+      id: 2,
+      title: "Dyslexia-Assistant ChatBot",
+      description: "A demonstration of using AI tools to increase accessibility.",
+      fullWidth: false,
+    },
+    {
+      id: 3,
+      title: "Custom Massive Text Search Engine",
+      description: "Hosting a public service search engine, querying 200,000+ mineral exploration reports in milliseconds.",
+      link: "https://wamexsearch.net.au",
+      image: "/searchscreen.png",
+      fullWidth: false,
+    },
+    {
+      id: 4,
+      title: "Used Car Market 2022- Various Models",
+      description: "Used car prices were scraped every 5 minutes for several months. The data was cleaned at categorised then visualised in Tableau. View the full visualisation at https://public.tableau.com/app/profile/luke6334/viz/offroad_vehicle_market/Dashboard1",
+      component: TableauEmbed,
+      fullWidth: true,
+    },
+    {
+      id: 5,
+      title: "Interactive Node + ReactJS Resume",
+      description: "This webpage! View the source code on GitHub.",
+      fullWidth: false,
+    },
+    {
+      id: 6,
+      title: "Raspberry Pi Smart 12v Car",
+      description: "Using a Raspberry Pi4 a dual 12v battery system and some electronics, I created a remote controllable lighting system for my 4x4. The system is controlled via a web interface or physical toggle buttons.",
+      fullWidth: true,
+    },
+    {
+      id: 7,
+      title: "Arduino ESP32 GPS Speedometer",
+      description: "My girlfriend's 1985 Hilux has a dodgy speedo. I used an ESP32 and a GPS module to create a digital speedometer. It has not stopped her getting speeding tickets.",
+      fullWidth: true,
+    },
+  ];
 
-        <DemoCard title="Interactive Node + ReactJS Resume">
-          <p className="text-sm text-blue-200">
-            This webpage! View the source code on GitHub.
-          </p>
-          {/* Add your 3D model viewer here */}
-        </DemoCard>
+  const Demos = ({ fullWidth = false }) => {
+    const containerClass = fullWidth ? styles.fullWidthDemosContainer : styles.demosContainer;
+    const headerClass = fullWidth ? styles.fullWidthDemosHeader : styles.demosHeader;
+    
+    const filteredDemos = demos.filter(demo => demo.fullWidth === fullWidth);
+    
+    return (
+      <div className={containerClass}>
+        <h2 className={headerClass}>{fullWidth ? "Full-Width Project Demos" : "Project Demos"}</h2>
+        <div className={fullWidth ? "" : styles.demoGrid}>
+          {filteredDemos.map(demo => (
+            <DemoCard key={demo.id} title={demo.title} backgroundColor="bg-gray-900">
+              <p className="text-sm text-blue-200 mb-4">{demo.description}</p>
+              {demo.link && demo.image && (
+                <a 
+                  href={demo.link} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="block w-full hover:opacity-80 transition-opacity"
+                >
+                  <img 
+                    src={demo.image} 
+                    alt={`${demo.title} Screenshot`} 
+                    className="w-full rounded-lg shadow-lg" 
+                  />
+                </a>
+              )}
+              {demo.component && <demo.component />}
+            </DemoCard>
+          ))}
+        </div>
       </div>
     );
   };
-
 
   return (
     <div className={styles.container}>
@@ -195,8 +222,10 @@ const ModernResume = () => {
               })}
             </div>
           </div>
-          <Demos />
+          <Demos fullWidth={false}/>
         </div>
+        <SkillTags />
+        <Demos fullWidth={true} />
       </div>
     </div>
   );
