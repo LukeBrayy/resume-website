@@ -20,7 +20,7 @@ Thumbs.db
 *.sublime-workspace
 
 # Build directory
-build/
+# I want the build ! build/
 
 # Coverage directory used by testing tools
 coverage/
