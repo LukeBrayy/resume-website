@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect } from 'react';
 import { Gift, Users, Heart, Ban, Shuffle, RotateCcw, Check } from 'lucide-react';
 import SantaListCollection from './SantaListCollection';
 import './SecretSanta.css';
@@ -30,6 +30,15 @@ const SecretSanta = () => {
   const [matches, setMatches] = useState([]);
   const [checkedGivers, setCheckedGivers] = useState({});
   const [checkedReceivers, setCheckedReceivers] = useState({});
+
+  useEffect(() => {
+    const titles = {
+      familyAdults: "Secret Santa - Family Adults",
+      cousins: "Secret Santa - Cousins",
+      friends: "Secret Santa - Friends"
+    };
+    document.title = titles[category] || "Secret Santa Matcher";
+  }, [category]);
 
   const changeCategory = (newCategory) => {
     setCategory(newCategory);
