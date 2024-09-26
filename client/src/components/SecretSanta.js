@@ -1,18 +1,19 @@
-import React, { useState , useEffect } from 'react';
+import React, { useState , useEffect }from 'react';
 import { Gift, Users, Heart, Ban, Shuffle, RotateCcw, Check } from 'lucide-react';
 import SantaListCollection from './SantaListCollection';
 import './SecretSanta.css';
 
 const predefinedLists = {
   familyAdults: {
-    participants: ['Mom', 'Dad', 'Aunt Jane', 'Uncle Bob', 'Grandma', 'Grandpa'],
-    couples: [['Mom', 'Dad'], ['Aunt Jane', 'Uncle Bob']],
-    blacklist: [['Grandma', 'Grandpa'], ['Mom', 'Aunt Jane']]
+    participants: ['Shano', 'Charl', 'Avvie', 'Mel', 'Dale', 'Granny Margi', 'Dave', 'Sandy'],
+    couples: [['Mel', 'Dale'], ['Avvie', 'Shano'], ['Sandy', 'Dave']],
+    blacklist: [['Margi', 'Granny']]
   },
   cousins: {
-    participants: ['Alex', 'Emma', 'Olivia', 'Ethan', 'Sophia', 'Liam'],
-    couples: [['Alex', 'Emma']],
-    blacklist: [['Olivia', 'Ethan'], ['Sophia', 'Liam']]
+    // luke sam briony jamie shantelle doug levi jake shane keisha
+    participants: ['Luke', 'Sam', 'Briony', 'Jamie', 'Shantelle', 'Doug', 'Levi', 'Jake', 'Shane', 'Keisha'],
+    couples: [['Jake', 'Keisha'], ['Doug', 'Shantelle']],
+    blacklist: [['Luke', 'Sam'], ['Briony', 'Jamie'], ['Jake', 'Shane'], ['Jake', 'Doug'], ['Shane', 'Doug']]
   },
   friends: {
     participants: ['Sarah', 'Mike', 'Lisa', 'Tom', 'Rachel', 'Chris'],
