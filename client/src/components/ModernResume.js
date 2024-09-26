@@ -125,11 +125,20 @@ const ModernResume = () => {
     },
     {
       id: 8,
-      title: "Server Hardware Builds",
-      description: "I have built several servers for commericial use and edge-compute racks. At Orexplore I deployed (and un-deployed our entire self-contained IT at 5 remote sites across the Australian desert, with custom server builds.",
+      title: "Secret Santa Webpage",
+      description: "Random secret santa solver with set rules for blacklisting pairs, avoiding couple matches and pre-defining some matches.",
       fullWidth: true,
-      // component: Servers,
+      link: "https://lukebray.au/SecretSanta",
+      linkText: "Secret Santa Sorter",
+      image: "/secretsanta.png",
     }
+    // {
+    //   id: 8,
+    //   title: "Server Hardware Builds",
+    //   description: "I have built several servers for commericial use and edge-compute racks. At Orexplore I deployed (and un-deployed our entire self-contained IT at 5 remote sites across the Australian desert, with custom server builds.",
+    //   fullWidth: true,
+    //   // component: Servers,
+    // }
   ];
 
   const Demos = ({ fullWidth = false }) => {
