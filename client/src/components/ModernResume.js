@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import DemoCard from './DemoCard';
 import TableauEmbed from './TableauEmbed';
 import SkillTags from './SkillTags';
-import { TrainFrontTunnel } from 'lucide-react';
 
 const styles = {
   container: "min-h-screen bg-gradient-to-br from-blue-700 to-blue-900 text-white p-8 font-['Montserrat',sans-serif]",
@@ -124,6 +123,13 @@ const ModernResume = () => {
       description: "My girlfriend's 1985 Hilux has a dodgy speedo. I used an ESP32 and a GPS module to create a digital speedometer. It has not stopped her getting speeding tickets. [video incoming!]",
       fullWidth: true,
     },
+    {
+      id: 8,
+      title: "Server Hardware Builds",
+      description: "I have built several servers for commericial use and edge-compute racks. At Orexplore I deployed (and un-deployed our entire self-contained IT at 5 remote sites across the Australian desert, with custom server builds.",
+      fullWidth: true,
+      // component: Servers,
+    }
   ];
 
   const Demos = ({ fullWidth = false }) => {
