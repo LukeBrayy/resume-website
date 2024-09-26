@@ -1,14 +1,60 @@
 import React, { useState } from 'react';
-import { Gift, Users, Heart, Ban, Shuffle } from 'lucide-react';
+import { Gift, Users, Heart, Ban, Shuffle, RotateCcw, Check } from 'lucide-react';
 import SantaListCollection from './SantaListCollection';
 import './SecretSanta.css';
 
+const predefinedLists = {
+  familyAdults: {
+    participants: ['Mom', 'Dad', 'Aunt Jane', 'Uncle Bob', 'Grandma', 'Grandpa'],
+    couples: [['Mom', 'Dad'], ['Aunt Jane', 'Uncle Bob']],
+    blacklist: [['Grandma', 'Grandpa'], ['Mom', 'Aunt Jane']]
+  },
+  cousins: {
+    participants: ['Alex', 'Emma', 'Olivia', 'Ethan', 'Sophia', 'Liam'],
+    couples: [['Alex', 'Emma']],
+    blacklist: [['Olivia', 'Ethan'], ['Sophia', 'Liam']]
+  },
+  friends: {
+    participants: ['Sarah', 'Mike', 'Lisa', 'Tom', 'Rachel', 'Chris'],
+    couples: [['Sarah', 'Mike'], ['Lisa', 'Tom']],
+    blacklist: [['Rachel', 'Chris'], ['Sarah', 'Lisa']]
+  }
+};
+
 const SecretSanta = () => {
-  const [participants, setParticipants] = useState(['Charl', 'Dave', 'Mel', 'Avvie', 'Sandy', 'Granny', 'Shano', 'Dale', 'Margie']);
-  const [couples, setCouples] = useState([['Dave', 'Sandy'], ['Avvie', 'Shano'], ["Granny", "Margie"], ["Mel", "Dale"]]);
-  const [blacklist, setBlacklist] = useState({});
-  const [preDefinedMatches, setPreDefinedMatches] = useState({});
+  const [category, setCategory] = useState('familyAdults');
+  const [participants, setParticipants] = useState(predefinedLists.familyAdults.participants);
+  const [couples, setCouples] = useState(predefinedLists.familyAdults.couples);
+  const [blacklist, setBlacklist] = useState(predefinedLists.familyAdults.blacklist);
+  const [preDefinedMatches, setPreDefinedMatches] = useState([]);
   const [matches, setMatches] = useState([]);
+  const [checkedGivers, setCheckedGivers] = useState({});
+  const [checkedReceivers, setCheckedReceivers] = useState({});
+
+  const changeCategory = (newCategory) => {
+    setCategory(newCategory);
+    setParticipants(predefinedLists[newCategory].participants);
+    setCouples(predefinedLists[newCategory].couples);
+    setBlacklist(predefinedLists[newCategory].blacklist);
+    setPreDefinedMatches([]);
+    setMatches([]);
+    setCheckedGivers({});
+    setCheckedReceivers({});
+  };
+
+  const resetAll = () => {
+    setMatches([]);
+    setCheckedGivers({});
+    setCheckedReceivers({});
+  };
+  
+  const toggleChecked = (type, name) => {
+    if (type === 'giver') {
+      setCheckedGivers(prev => ({ ...prev, [name]: !prev[name] }));
+    } else {
+      setCheckedReceivers(prev => ({ ...prev, [name]: !prev[name] }));
+    }
+  };
 
   const generateMatches = () => {
     const availableGivers = [...participants];
@@ -16,7 +62,7 @@ const SecretSanta = () => {
     const newMatches = [];
 
     // Handle pre-defined matches
-    Object.entries(preDefinedMatches).forEach(([giver, receiver]) => {
+    preDefinedMatches.forEach(([giver, receiver]) => {
       newMatches.push([giver, receiver]);
       availableGivers.splice(availableGivers.indexOf(giver), 1);
       availableReceivers.splice(availableReceivers.indexOf(receiver), 1);
@@ -28,7 +74,7 @@ const SecretSanta = () => {
       let possibleReceivers = availableReceivers.filter(receiver => 
         receiver !== giver && 
         !couples.some(couple => couple.includes(giver) && couple.includes(receiver)) &&
-        (!blacklist[giver] || !blacklist[giver].includes(receiver))
+        !blacklist.some(pair => pair[0] === giver && pair[1] === receiver)
       );
 
       if (possibleReceivers.length === 0) {
@@ -49,81 +95,118 @@ const SecretSanta = () => {
     <div className="secret-santa-container">
       <h1 className="secret-santa-title">🎄 Secret Santa Matcher 🎅</h1>
       
+      <div className="category-selector">
+        <button 
+          className={`category-button ${category === 'familyAdults' ? 'active' : ''}`}
+          onClick={() => changeCategory('familyAdults')}
+        >
+          Family Adults
+        </button>
+        <button 
+          className={`category-button ${category === 'cousins' ? 'active' : ''}`}
+          onClick={() => changeCategory('cousins')}
+        >
+          Cousins
+        </button>
+        <button 
+          className={`category-button ${category === 'friends' ? 'active' : ''}`}
+          onClick={() => changeCategory('friends')}
+        >
+          Friends
+        </button>
+      </div>
+      
       <div className="santa-list-grid">
         <SantaListCollection
           icon={Users}
           title="Participants"
-          label="Enter names (comma-separated)"
-          value={participants.join(', ')}
-          onChange={(e) => setParticipants(e.target.value.split(',').map(p => p.trim()))}
-          placeholder="e.g., John, Jane, Bob"
+          type="participants"
+          items={participants}
+          onItemsChange={setParticipants}
         />
 
         <SantaListCollection
           icon={Heart}
           title="Couples"
-          label="Enter pairs (comma-separated, use + between names)"
-          value={couples.map(couple => couple.join('+')).join(', ')}
-          onChange={(e) => setCouples(e.target.value.split(',').map(pair => pair.trim().split('+')))}
-          placeholder="e.g., John+Jane, Bob+Alice"
+          type="couples"
+          items={couples}
+          onItemsChange={setCouples}
         />
 
         <SantaListCollection
           icon={Ban}
           title="Blacklist"
-          label="Enter pairs to avoid (comma-separated, use > between names)"
-          value={Object.entries(blacklist).map(([key, value]) => `${key}>${value.join(',')}`).join('; ')}
-          onChange={(e) => {
-            const newBlacklist = {};
-            e.target.value.split(';').forEach(pair => {
-              const [key, value] = pair.trim().split('>');
-              if (key && value) {
-                newBlacklist[key] = value.split(',').map(v => v.trim());
-              }
-            });
-            setBlacklist(newBlacklist);
-          }}
-          placeholder="e.g., John>Jane,Bob; Alice>Charlie"
+          type="blacklist"
+          items={blacklist}
+          onItemsChange={setBlacklist}
         />
 
         <SantaListCollection
           icon={Gift}
           title="Pre-defined Matches"
-          label="Enter pre-defined matches (comma-separated, use > between names)"
-          value={Object.entries(preDefinedMatches).map(([key, value]) => `${key}>${value}`).join(', ')}
-          onChange={(e) => {
-            const newPreDefined = {};
-            e.target.value.split(',').forEach(pair => {
-              const [key, value] = pair.trim().split('>');
-              if (key && value) {
-                newPreDefined[key] = value;
-              }
-            });
-            setPreDefinedMatches(newPreDefined);
-          }}
-          placeholder="e.g., John>Alice, Bob>Charlie"
+          type="predefined"
+          items={preDefinedMatches}
+          onItemsChange={setPreDefinedMatches}
         />
       </div>
+
 
       <div className="generate-button-container">
         <button onClick={generateMatches} className="generate-button">
           <Shuffle className="generate-button-icon" />
           Generate Matches
         </button>
+        <button onClick={resetAll} className="reset-button">
+          <RotateCcw className="reset-button-icon" />
+          Reset
+        </button>
       </div>
 
-      {matches.length > 0 && (
-        <div className="matches-card">
-          <h2 className="matches-title">🎁 Secret Santa Matches 🎁</h2>
-          <ul className="matches-list">
-            {matches.map(([giver, receiver], index) => (
-              <li key={index} className="match-item">
-                <span className="giver">{giver}</span> buys for <span className="receiver">{receiver}</span>
-              </li>
+      <div className="matches-section">
+        {matches.length > 0 && (
+          <div className="matches-card">
+            <h2 className="matches-title">🎁 Secret Santa Matches 🎁</h2>
+            <ul className="matches-list">
+              {matches.map(([giver, receiver], index) => (
+                <li key={index} className="match-item">
+                  <span className="giver">{giver}</span> buys for <span className="receiver">{receiver}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div className="checklists-container">
+          <div className="checklist">
+            <h3>Givers</h3>
+            {participants.map(name => (
+              <label key={`giver-${name}`} className="checklist-item">
+                <input
+                  type="checkbox"
+                  checked={checkedGivers[name] || false}
+                  onChange={() => toggleChecked('giver', name)}
+                />
+                <Check className={`check-icon ${checkedGivers[name] ? 'checked' : ''}`} />
+                {name}
+              </label>
             ))}
-          </ul>
+          </div>
+          <div className="checklist">
+            <h3>Receivers</h3>
+            {participants.map(name => (
+              <label key={`receiver-${name}`} className="checklist-item">
+                <input
+                  type="checkbox"
+                  checked={checkedReceivers[name] || false}
+                  onChange={() => toggleChecked('receiver', name)}
+                />
+                <Check className={`check-icon ${checkedReceivers[name] ? 'checked' : ''}`} />
+                {name}
+              </label> 
+            ))}
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };

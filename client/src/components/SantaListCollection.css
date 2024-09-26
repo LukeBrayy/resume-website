@@ -4,6 +4,7 @@
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 16px;
+    overflow: hidden; /* Ensure no content spills out */
   }
   
   .santa-list-header {
@@ -22,15 +23,86 @@
     padding: 16px;
   }
   
-  .santa-list-input {
-    width: 100%;
+  .santa-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 0 16px 0;
+  }
+  
+  .santa-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 8px;
-    margin-top: 8px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .santa-list-item:last-child {
+    border-bottom: none;
+  }
+  
+  .santa-list-add {
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap to next line */
+    align-items: center;
+  }
+  
+  .santa-list-input {
+    flex: 1 1 100%; /* Take full width by default */
+    min-width: 0; /* Allow input to shrink below its default minimum width */
+    padding: 8px;
+    margin-bottom: 8px; /* Add some space between wrapped items */
     border: 1px solid #e0e0e0;
     border-radius: 4px;
   }
   
-  label {
-    display: block;
-    margin-bottom: 4px;
+  .input-group {
+    display: flex;
+    flex-wrap: wrap; /* Allow inputs to wrap */
+    width: 100%; /* Take full width of container */
+    margin-right: 8px;
+  }
+  
+  .input-group .santa-list-input {
+    flex: 1 1 calc(50% - 4px); /* Take half width minus half of the gap */
+    min-width: 120px; /* Minimum width before wrapping */
+    margin-right: 8px;
+  }
+  
+  .input-group .santa-list-input:last-child {
+    margin-right: 0;
+  }
+  
+  .add-button, .remove-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+    flex-shrink: 0; /* Prevent button from shrinking */
+  }
+  
+  .add-button {
+    color: #4caf50;
+    margin-top: 8px; /* Add some space above the button when inputs wrap */
+  }
+  
+  .remove-button {
+    color: #f44336;
+  }
+  
+  .add-button:hover, .remove-button:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 480px) {
+    .input-group .santa-list-input {
+      flex: 1 1 100%; /* Stack inputs vertically on very small screens */
+      margin-right: 0;
+    }
   }
