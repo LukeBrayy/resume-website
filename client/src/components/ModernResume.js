@@ -129,7 +129,7 @@ const ModernResume = () => {
       description: "Random secret santa solver with set rules for blacklisting pairs, avoiding couple matches and pre-defining some matches.",
       fullWidth: true,
       link: "https://lukebray.au/SecretSanta",
-      linkText: "Secret Santa Sorter",
+      linkText: "Secret Santa Solver",
       image: "/secretsanta.png",
     }
     // {

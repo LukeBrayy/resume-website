@@ -5,7 +5,7 @@ import './SecretSanta.css';
 
 const predefinedLists = {
   familyAdults: {
-    participants: ['Shano', 'Charl', 'Avvie', 'Mel', 'Dale', 'Granny Margi', 'Dave', 'Sandy'],
+    participants: ['Shano', 'Charl', 'Avvie', 'Mel', 'Dale', 'Granny', 'Margi', 'Dave', 'Sandy'],
     couples: [['Mel', 'Dale'], ['Avvie', 'Shano'], ['Sandy', 'Dave']],
     blacklist: [['Margi', 'Granny']]
   },
