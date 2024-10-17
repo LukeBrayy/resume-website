@@ -4,21 +4,31 @@ import SantaListCollection from './SantaListCollection';
 import './SecretSanta.css';
 
 const predefinedLists = {
-  familyAdults: {
-    participants: ['Shano', 'Charl', 'Avvie', 'Mel', 'Dale', 'Granny', 'Margi', 'Dave', 'Sandy'],
-    couples: [['Mel', 'Dale'], ['Avvie', 'Shano'], ['Sandy', 'Dave']],
-    blacklist: [['Margi', 'Granny']]
-  },
-  cousins: {
-    // luke sam briony jamie shantelle doug levi jake shane keisha
-    participants: ['Luke', 'Sam', 'Briony', 'Jamie', 'Shantelle', 'Doug', 'Levi', 'Jake', 'Shane', 'Keisha'],
-    couples: [['Jake', 'Keisha'], ['Doug', 'Shantelle']],
-    blacklist: [['Luke', 'Sam'], ['Briony', 'Jamie'], ['Jake', 'Shane'], ['Jake', 'Doug'], ['Shane', 'Doug']]
-  },
-  friends: {
-    participants: ['Sarah', 'Mike', 'Lisa', 'Tom', 'Rachel', 'Chris'],
-    couples: [['Sarah', 'Mike'], ['Lisa', 'Tom']],
-    blacklist: [['Rachel', 'Chris'], ['Sarah', 'Lisa']]
+  // familyAdults: {
+  //   participants: ['Shano', 'Charl', 'Avvie', 'Mel', 'Dale', 'Granny', 'Margi', 'Dave', 'Sandy'],
+  //   couples: [['Mel', 'Dale'], ['Avvie', 'Shano'], ['Sandy', 'Dave']],
+  //   blacklist: [['Margi', 'Granny']]
+  // },
+  // cousins: {
+  //   // luke sam briony jamie shantelle doug levi jake shane keisha
+  //   participants: ['Luke', 'Sam', 'Briony', 'Jamie', 'Shantelle', 'Doug', 'Levi', 'Jake', 'Shane', 'Keisha'],
+  //   couples: [['Jake', 'Keisha'], ['Doug', 'Shantelle']],
+  //   blacklist: [['Luke', 'Sam'], ['Briony', 'Jamie'], ['Jake', 'Shane'], ['Jake', 'Doug'], ['Shane', 'Doug']]
+  // },
+    familyAdults: {
+      participants: ['Thomas', 'Emma', 'Oliver', 'Sophia', 'William', 'Isabella', 'James', 'Charlotte', 'Benjamin'],
+      couples: [['Sophia', 'William'], ['Oliver', 'Thomas'], ['Benjamin', 'Charlotte']],
+      blacklist: [['James', 'Isabella']]
+    },
+    cousins: {
+      participants: ['Ethan', 'Noah', 'Ava', 'Liam', 'Mia', 'Daniel', 'Zoe', 'Mason', 'Elijah', 'Lily'],
+      couples: [['Mason', 'Lily'], ['Daniel', 'Mia']],
+      blacklist: [['Ethan', 'Noah'], ['Ava', 'Liam'], ['Mason', 'Elijah'], ['Mason', 'Daniel'], ['Elijah', 'Daniel']]
+    },
+    friends: {
+      participants: ['Sarah', 'Mike', 'Lisa', 'Tom', 'Rachel', 'Chris'],
+      couples: [['Sarah', 'Mike'], ['Lisa', 'Tom']],
+      blacklist: [['Rachel', 'Chris'], ['Sarah', 'Lisa']]
   }
 };
 
