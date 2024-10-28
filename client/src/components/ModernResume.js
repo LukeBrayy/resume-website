@@ -83,7 +83,7 @@ const ModernResume = () => {
     {
       id: 2,
       title: "Dyslexia-Assistant ChatBot",
-      description: "A demonstration of using AI tools to increase accessibility. Demo incoming when I can figure out how to stop it being abused.",
+      description: "A demonstration of using AI tools to increase accessibility. Rate-limited demo incoming soon!",
       fullWidth: false,
     },
     {
