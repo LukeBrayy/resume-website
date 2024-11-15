@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import DemoCard from './DemoCard';
 import TableauEmbed from './TableauEmbed';
 import SkillTags from './SkillTags';
+import ImageCarousel from './ImageCarousel';
 
 const styles = {
   container: "min-h-screen bg-gradient-to-br from-blue-700 to-blue-900 text-white p-8 font-['Montserrat',sans-serif]",
@@ -113,9 +114,30 @@ const ModernResume = () => {
     },
     {
       id: 6,
-      title: "Raspberry Pi Smart 12v Car",
-      description: "Using a Raspberry Pi4 a dual 12v battery system and some electronics, I created a remote controllable lighting system for my 4x4. The system is controlled via a web interface or physical toggle buttons. [video incoming!]",
+      title: "Raspberry Pi Smart 12v Car / v2 Pool Controller",
+      description: "Using a Raspberry Pi4 a dual 12v battery system and some electronics, I created a remote controllable lighting system for my 4x4. The system is controlled via a web interface or physical toggle buttons. I then created a similar system for my friend's pool, reviving a dead pool controller using Home Assistant.",
       fullWidth: true,
+      component: ImageCarousel,
+      componentProps: {
+        items: [
+          {
+            url: "/car_12v_1.jpg",
+            alt: "Power to Accessories Panel using old PSU cables"
+          },
+          {
+            url: "/car_12v_2.jpg",
+            alt: "Final control box with 12v relays and Pi4"
+          },
+          {
+            url: "/pool_controller.jpg",
+            alt: "Pool Controller using Raspberry Pi and Home Assistant"
+          },
+          {
+            url: "/car_12v_3.mp4",
+            alt: "Video Demo"
+          },
+        ]
+      }
     },
     {
       id: 7,
@@ -127,6 +149,15 @@ const ModernResume = () => {
       id: 8,
       title: "Secret Santa Webpage",
       description: "Random secret santa solver with set rules for blacklisting pairs, avoiding couple matches and pre-defining some matches.",
+      fullWidth: true,
+      link: "https://lukebray.au/SecretSanta",
+      linkText: "Secret Santa Solver",
+      image: "/secretsanta.png",
+    },
+    {
+      id: 8,
+      title: "Hobbies",
+      description: "I like 4x4s, camping, dirt biking and squash! Here are some photos of my adventures.",
       fullWidth: true,
       link: "https://lukebray.au/SecretSanta",
       linkText: "Secret Santa Solver",
@@ -183,7 +214,7 @@ const ModernResume = () => {
                   />
                 </a>
               )}
-              {demo.component && <demo.component />}
+              {demo.component && <demo.component {...demo.componentProps} />}
             </DemoCard>
           ))}
         </div>
