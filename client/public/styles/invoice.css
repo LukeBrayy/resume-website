@@ -1,0 +1,150 @@
+
+/* Invoice Print Styles */
+body { 
+    font-family: Arial, sans-serif; 
+    margin: 40px;
+    font-size: 0.9em;
+}
+
+.invoice-header { 
+    display: flex; 
+    justify-content: space-between; 
+    margin-bottom: 40px;
+    font-size: 0.9em;
+}
+
+.invoice-header h1 {
+    font-size: 1.8em;
+}
+
+.invoice-header h2 {
+    font-size: 1.4em;
+}
+
+.main-content {
+    
+    display: grid;
+    grid-template-columns: auto 300px;
+    gap: 40px;
+    margin-bottom: 30px;
+}
+
+.bill-to {
+    font-size: 0.9em;
+}
+
+.payment-details {
+    font-size: 0.9em;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    margin: 20px 0;
+    font-size: 0.9em;
+}
+
+th, td { 
+    padding: 10px; 
+    text-align: left; 
+    border-bottom: 1px solid #ddd; 
+}
+
+.work-calendar {
+    margin-top: 40px;
+    border-top: 2px solid #ddd;
+    padding-top: 20px;
+}
+
+.calendar-title {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.calendar-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.month-calendar {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 4px;
+    background: #fff;
+}
+
+.days-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+}
+
+.day {
+    padding: 5px;
+    text-align: center;
+    font-size: 0.8em;
+    border: 1px solid #eee;
+}
+
+.day.worked {
+    background-color: #e3f2fd;
+    font-weight: bold;
+    border: 2px solid #000;
+    position: relative;
+    background-image: repeating-linear-gradient(
+        45deg,
+        #000,
+        #000 1px,
+        #fff 1px,
+        #fff 6px
+    );
+    color: #000;
+}
+
+.day-header {
+    font-weight: bold;
+    text-align: center;
+    padding: 5px;
+}
+
+.day.empty {
+    background: transparent;
+    border: none;
+}
+
+.billing-section {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+}
+
+.bill-to, .payment-details {
+    flex: 1;
+}
+
+.table-footer {
+    font-weight: bold;
+    background-color: #f8f9fa;
+}
+
+.no-print {
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    background: #4ECDC4;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+@media print {
+    .no-print {
+        display: none;
+    }
+}

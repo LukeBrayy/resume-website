@@ -1,6 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import Calendar from 'react-calendar';
-import { Bar } from 'react-chartjs-2';
 import 'react-calendar/dist/Calendar.css';
 import './Rates.css';
 import {
@@ -13,8 +12,10 @@ import {
   Legend
 } from 'chart.js';
 import PasswordPrompt from './PasswordPrompt';
-import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
+import { getDocument, saveDocument } from '../services/firebase';
 import SummaryStats from './SummaryStats';
+import InvoiceGenerator from './InvoiceGenerator';
+import PurchaseOrderManager from './PurchaseOrderManager';
 
 ChartJS.register(
   CategoryScale,
@@ -39,7 +40,8 @@ function Rates() {
     const [companiesData, setCompaniesData] = useState(initialCompaniesData);
     const [showPasswordPrompt, setShowPasswordPrompt] = useState(true);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const db = getFirestore();
+    const [purchaseOrders, setPurchaseOrders] = useState({});
+    const [invoices, setInvoices] = useState({});
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -49,9 +51,11 @@ function Rates() {
 
     const loadData = async () => {
         try {
-            const [calendarDoc, companiesDoc] = await Promise.all([
-                getDoc(doc(db, 'calendar', 'assignments')),
-                getDoc(doc(db, 'calendar', 'companies'))
+            const [calendarDoc, companiesDoc, purchaseOrdersDoc, invoicesDoc] = await Promise.all([
+                getDocument('calendar', 'assignments'),
+                getDocument('calendar', 'companies'),
+                getDocument('calendar', 'purchaseOrders'),
+                getDocument('calendar', 'invoices')
             ]);
 
             if (calendarDoc.exists()) {
@@ -61,11 +65,19 @@ function Rates() {
             if (companiesDoc.exists()) {
                 setCompaniesData(companiesDoc.data().companies || initialCompaniesData);
             } else {
-                // If no companies data exists yet, save the initial data
-                await setDoc(doc(db, 'calendar', 'companies'), {
-                    companies: initialCompaniesData,
-                    lastUpdated: new Date().toISOString()
-                });
+                await saveDocument('calendar', 'companies', { companies: initialCompaniesData });
+            }
+
+            if (purchaseOrdersDoc.exists()) {
+                setPurchaseOrders(purchaseOrdersDoc.data().purchaseOrders || {});
+            } else {
+                await saveDocument('calendar', 'purchaseOrders', { purchaseOrders: {} });
+            }
+
+            if (invoicesDoc.exists()) {
+                setInvoices(invoicesDoc.data().invoices || {});
+            } else {
+                await saveDocument('calendar', 'invoices', { invoices: {} });
             }
         } catch (error) {
             console.error("Error loading data:", error);
@@ -73,16 +85,9 @@ function Rates() {
     };
 
     const saveData = async () => {
-        console.log('saving data');
-        console.log(assignments);
-        
         if (!isAuthenticated) return;
-
         try {
-            await setDoc(doc(db, 'calendar', 'assignments'), {
-                assignments,
-                lastUpdated: new Date().toISOString()
-            });
+            await saveDocument('calendar', 'assignments', { assignments });
         } catch (error) {
             console.error("Error saving data:", error);
         }
@@ -90,15 +95,31 @@ function Rates() {
 
     const saveCompaniesData = async (newCompaniesData) => {
         if (!isAuthenticated) return;
-
         try {
-            await setDoc(doc(db, 'calendar', 'companies'), {
-                companies: newCompaniesData,
-                lastUpdated: new Date().toISOString()
-            });
+            await saveDocument('calendar', 'companies', { companies: newCompaniesData });
             setCompaniesData(newCompaniesData);
         } catch (error) {
             console.error("Error saving companies data:", error);
+        }
+    };
+
+    const savePurchaseOrders = async (newPurchaseOrders) => {
+        if (!isAuthenticated) return;
+        try {
+            await saveDocument('calendar', 'purchaseOrders', { purchaseOrders: newPurchaseOrders });
+            setPurchaseOrders(newPurchaseOrders);
+        } catch (error) {
+            console.error("Error saving purchase orders:", error);
+        }
+    };
+
+    const saveInvoices = async (newInvoices) => {
+        if (!isAuthenticated) return;
+        try {
+            await saveDocument('calendar', 'invoices', { invoices: newInvoices });
+            setInvoices(newInvoices);
+        } catch (error) {
+            console.error("Error saving invoices:", error);
         }
     };
 
@@ -167,10 +188,20 @@ function Rates() {
         const dateStr = date.toISOString().split('T')[0];
         const company = assignments[dateStr];
         if (!company) return null;
+
+        // Find if this date is in any invoice
+        const invoice = Object.values(invoices).find(inv => 
+            inv.days.includes(dateStr)
+        );
         
         return (
             <div className="tile-content" style={{ backgroundColor: companiesData[company].color }}>
                 {company}
+                {invoice && (
+                    <div className="invoice-badge" style={{ color: invoice.status === 'sent' ? '#4CAF50' : '#FFC107' }}>
+                        {invoice.id} ({invoice.status})
+                    </div>
+                )}
             </div>
         );
     };
@@ -229,6 +260,21 @@ function Rates() {
             <SummaryStats 
                 assignments={assignments}
                 companiesData={companiesData}
+            />
+
+            <InvoiceGenerator 
+                assignments={assignments}
+                companiesData={companiesData}
+                purchaseOrders={purchaseOrders}
+                invoices={invoices}
+                saveInvoices={saveInvoices}
+            />
+
+            <PurchaseOrderManager
+                purchaseOrders={purchaseOrders}
+                savePurchaseOrders={savePurchaseOrders}
+                companiesData={companiesData}
+                invoices={invoices}
             />
         </div>
     );

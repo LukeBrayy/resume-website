@@ -1,0 +1,270 @@
+.purchase-order-manager {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-top: 20px;
+}
+
+.purchase-order-manager h3 {
+    margin-bottom: 15px;
+}
+
+.purchase-order-manager ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.purchase-order-manager li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.purchase-order-manager li button {
+    margin-left: auto;
+    padding: 5px 10px;
+}
+
+.po-container {
+    display: flex;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.po-control-panel {
+    flex: 0 0 300px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    height: fit-content;
+}
+
+.po-summary {
+    flex: 1;
+}
+
+.po-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.po-form input,
+.po-form select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.po-form button {
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.add-po-button {
+    width: 100%;
+    padding: 10px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.po-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.po-item {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+.po-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.po-header-details {
+    display: flex;
+    gap: 20px;
+    color: #666;
+}
+
+.po-progress {
+    margin: 15px 0;
+}
+
+.progress-bar {
+    height: 12px;
+    background: #e9ecef;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 8px;
+    display: flex;
+}
+
+.progress-sent {
+    background: #4CAF50;
+    height: 100%;
+}
+
+.progress-draft {
+    background: #FFC107;
+    height: 100%;
+}
+
+.progress-remaining {
+    background: #E0E0E0;
+    height: 100%;
+}
+
+.progress-details {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9em;
+    margin-top: 8px;
+}
+
+.progress-amount {
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: rgba(0,0,0,0.05);
+}
+
+.progress-amount.sent {
+    color: #4CAF50;
+}
+
+.progress-amount.draft {
+    color: #FFC107;
+}
+
+.progress-amount.remaining {
+    color: #757575;
+}
+
+.invoice-details {
+    margin: 10px 0;
+}
+
+.invoice-details summary {
+    cursor: pointer;
+    padding: 8px;
+    margin-top: 15px;
+    background: rgba(0,0,0,0.03);
+    border-radius: 4px;
+}
+
+.invoice-list {
+    list-style: none;
+    padding: 10px;
+    margin: 5px 0;
+    background: #f8f8f8;
+    border-radius: 4px;
+}
+
+.invoice-item {
+    padding: 5px;
+    margin: 3px 0;
+    border-radius: 3px;
+}
+
+.invoice-item.sent {
+    color: #4CAF50;
+}
+
+.invoice-item.draft {
+    color: #FFC107;
+}
+
+.no-invoices {
+    color: #757575;
+    font-style: italic;
+    margin: 5px 0;
+}
+
+.po-list-control {
+    margin-top: 20px;
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+}
+
+.po-list-control h4 {
+    margin-bottom: 15px;
+    color: #666;
+}
+
+.po-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: white;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.po-list-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.po-list-details strong {
+    color: #333;
+}
+
+.po-list-details span {
+    color: #666;
+    font-size: 0.9em;
+}
+
+.edit-po-button {
+    padding: 4px 8px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.edit-po-button:hover {
+    background: #45a049;
+}
+
+.po-list-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.delete-po-button {
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.delete-po-button:hover {
+    background-color: #cc0000;
+}
