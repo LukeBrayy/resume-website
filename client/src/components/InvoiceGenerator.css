@@ -71,7 +71,7 @@
 }
 
 /* Invoice Print Styles */
-body { 
+.invoice-print-container { 
     font-family: Arial, sans-serif; 
     margin: 40px;
     font-size: 0.9em;
