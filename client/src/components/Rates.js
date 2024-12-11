@@ -14,7 +14,7 @@ import {
 import PasswordPrompt from './PasswordPrompt';
 import { getDocument, saveDocument } from '../services/firebase';
 import SummaryStats from './SummaryStats';
-import InvoiceGenerator from './InvoiceGenerator';
+import InvoiceGenerator from './InvoiceGenerator/InvoiceGenerator';  // Updated import path
 import PurchaseOrderManager from './PurchaseOrderManager';
 
 ChartJS.register(

@@ -1,7 +1,9 @@
-
 export const generateCalendarHTML = (dates) => {
-    // Convert string dates to Date objects and sort them
-    const workDates = dates.map(d => new Date(d)).sort((a, b) => a - b);
+    // Ensure dates are handled in local timezone
+    const workDates = dates.map(d => {
+        const date = new Date(d);
+        return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    }).sort((a, b) => a - b);
     
     // Get the first and last month/year
     const startDate = workDates[0];
@@ -38,9 +40,7 @@ export const generateCalendarHTML = (dates) => {
                 } else {
                     const currentDay = new Date(year, month, dayCount);
                     const isWorkDay = workDates.some(d => 
-                        d.getDate() === currentDay.getDate() &&
-                        d.getMonth() === currentDay.getMonth() &&
-                        d.getFullYear() === currentDay.getFullYear()
+                        d.getTime() === currentDay.getTime()
                     );
                     weekHTML += `
                         <td class="${isWorkDay ? 'worked-day' : ''}">${dayCount}</td>

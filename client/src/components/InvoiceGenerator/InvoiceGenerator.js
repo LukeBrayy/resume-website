@@ -1,17 +1,29 @@
-
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { InvoiceForm } from './InvoiceForm';
 import { InvoiceList } from './InvoiceList';
 import { useInvoices } from '../../hooks/useInvoices';
+import { getSetting } from '../../services/firebase';
 import './InvoiceGenerator.css';
 
 const InvoiceGenerator = ({ assignments, companiesData, purchaseOrders, invoices, saveInvoices }) => {
+    const [paymentDetails, setPaymentDetails] = useState(null);
     const { 
         handleCreateInvoice, 
         handleDeleteInvoice, 
         markAsSent, 
-        markAsUnsent 
+        markAsUnsent,
+        generateInvoicePreview 
     } = useInvoices(invoices, saveInvoices);
+
+    useEffect(() => {
+        const fetchPaymentDetails = async () => {
+            const doc = await getSetting('paymentDetails');
+            if (doc.exists()) {
+                setPaymentDetails(doc.data());
+            }
+        };
+        fetchPaymentDetails();
+    }, []);
 
     return (
         <div className="invoice-generator">
@@ -27,6 +39,13 @@ const InvoiceGenerator = ({ assignments, companiesData, purchaseOrders, invoices
                 onDelete={handleDeleteInvoice}
                 onMarkSent={markAsSent}
                 onMarkUnsent={markAsUnsent}
+                onPreview={(invoice) => generateInvoicePreview(
+                    invoice, 
+                    assignments, 
+                    companiesData, 
+                    purchaseOrders,
+                    paymentDetails
+                )}
             />
         </div>
     );

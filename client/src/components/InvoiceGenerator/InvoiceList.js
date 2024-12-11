@@ -1,8 +1,6 @@
-
 import React from 'react';
-import { generateInvoicePreview } from '../../utils/invoiceGenerator';
 
-export const InvoiceList = ({ invoices, onDelete, onMarkSent, onMarkUnsent }) => {
+export const InvoiceList = ({ invoices, onDelete, onMarkSent, onMarkUnsent, onPreview }) => {
     return (
         <div className="invoice-list">
             <h4>Invoices</h4>
@@ -18,7 +16,7 @@ export const InvoiceList = ({ invoices, onDelete, onMarkSent, onMarkUnsent }) =>
                         </span>
                         <span>{invoice.status}</span>
                         <span>${invoice.amount}</span>
-                        <button onClick={() => generateInvoicePreview(invoice)}>View</button>
+                        <button onClick={() => onPreview(invoice)}>View</button>
                         {invoice.status === 'draft' ? (
                             <>
                                 <button onClick={() => onMarkSent(invoice.id)}>Mark as Sent</button>

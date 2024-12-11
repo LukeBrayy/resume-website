@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 
 export const InvoiceForm = ({ assignments, companiesData, purchaseOrders, onCreateInvoice }) => {
@@ -9,15 +8,17 @@ export const InvoiceForm = ({ assignments, companiesData, purchaseOrders, onCrea
 
     const handleSubmit = () => {
         onCreateInvoice({
-            invoiceNumber,
-            company: selectedCompany,
+            selectedCompany,                 // this matches the validation check
             dateRange,
-            purchaseOrderId: selectedPurchaseOrder
+            selectedPurchaseOrder,          // this matches the validation check
+            invoiceNumber,
+            assignments,
+            companiesData,
+            setInvoiceNumber,
+            setDateRange,
+            setSelectedPurchaseOrder,
+            company: selectedCompany        // adding this for backward compatibility
         });
-        // Reset form
-        setInvoiceNumber('');
-        setDateRange({ start: '', end: '' });
-        setSelectedPurchaseOrder('');
     };
 
     return (

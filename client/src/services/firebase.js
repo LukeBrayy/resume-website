@@ -56,3 +56,6 @@ export const getCollection = async (collection) => {
 
 export const updateDocument = (collection, docId, data) => 
     updateDoc(doc(db, collection, docId), data);
+
+export const getSetting = (settingId) => 
+    getDoc(doc(db, 'settings', settingId));

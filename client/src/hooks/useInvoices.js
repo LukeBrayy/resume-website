@@ -1,10 +1,17 @@
-
 import { useCallback } from 'react';
+import { generateInvoiceHTML, prepareInvoiceData } from '../utils/invoiceGenerator';
 
 export const useInvoices = (invoices, saveInvoices) => {
     const handleCreateInvoice = useCallback((invoiceData) => {
-        if (!invoiceData.selectedCompany || !invoiceData.dateRange.start || !invoiceData.dateRange.end || !invoiceData.selectedPurchaseOrder || !invoiceData.invoiceNumber) {
-            console.log('Validation failed:', { // Debug log
+        // Log the full invoiceData for debugging
+        console.log('Full invoice data:', invoiceData);
+        
+        if (!invoiceData.selectedCompany || 
+            !invoiceData.dateRange.start || 
+            !invoiceData.dateRange.end || 
+            !invoiceData.selectedPurchaseOrder || 
+            !invoiceData.invoiceNumber) {
+            console.log('Validation failed:', {
                 selectedCompany: invoiceData.selectedCompany,
                 dateRange: invoiceData.dateRange,
                 selectedPurchaseOrder: invoiceData.selectedPurchaseOrder,
@@ -22,7 +29,7 @@ export const useInvoices = (invoices, saveInvoices) => {
                 date <= invoiceData.dateRange.end
             )
             .map(([date]) => date);
-
+            
         if (selectedDays.length === 0) {
             alert('No work days found in the selected date range');
             return;
@@ -100,10 +107,17 @@ export const useInvoices = (invoices, saveInvoices) => {
         saveInvoices(updatedInvoices);
     }, [invoices, saveInvoices]);
 
+    const generateInvoicePreview = useCallback((invoice, assignments, companiesData, purchaseOrders, paymentDetails) => {
+        const invoiceData = prepareInvoiceData(invoice, assignments, companiesData, purchaseOrders, paymentDetails);
+        const invoiceWindow = window.open('', '_blank');
+        invoiceWindow.document.write(generateInvoiceHTML(invoiceData));
+    }, []);
+
     return {
         handleCreateInvoice,
         handleDeleteInvoice,
         markAsSent,
-        markAsUnsent
+        markAsUnsent,
+        generateInvoicePreview
     };
 };

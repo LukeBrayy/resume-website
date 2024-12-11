@@ -1,14 +1,13 @@
 import { generateCalendarHTML } from './calendarGenerator';
 
+// Add these helper functions at the top of the file
+const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-AU');
+};
+
 export const generateInvoiceHTML = (data) => {
     const total = data.items.reduce((sum, item) => sum + item.amount, 0);
-
-    // Sort items by date before generating HTML
-    const sortedItems = [...data.items].sort(
-        (a, b) => new Date(a.startDate) - new Date(b.startDate)
-    );
-    data.items = sortedItems;
-    console.log(data.items);
     const poDetails = data.purchaseOrder;
 
     return `
@@ -63,20 +62,18 @@ export const generateInvoiceHTML = (data) => {
                         </tr>
                     </thead>
                     <tbody>
-                        ${data.items.map(item => `
-                            <tr>
-                                <td>${new Date(item.startDate).toLocaleDateString()} - ${new Date(item.endDate).toLocaleDateString()}</td>
-                                <td>Consulting Services</td>
-                                <td>${item.days}</td>
-                                <td>$${item.rate}</td>
-                                <td>$${item.amount}</td>
-                            </tr>
-                        `).join('')}
+                        <tr>
+                            <td>${formatDate(data.dateRange.start)} - ${formatDate(data.dateRange.end)}</td>
+                            <td>Consulting Services</td>
+                            <td>${data.items[0].days}</td>
+                            <td>$${data.items[0].rate}</td>
+                            <td>$${data.items[0].amount}</td>
+                        </tr>
                     </tbody>
                     <tfoot>
                         <tr class="table-footer">
                             <td colspan="2">Total</td>
-                            <td>${data.items.reduce((sum, item) => sum + item.days, 0)}</td>
+                            <td>${data.items[0].days}</td>
                             <td></td>
                             <td>$${total}</td>
                         </tr>
@@ -85,16 +82,7 @@ export const generateInvoiceHTML = (data) => {
                 
                 <div class="work-calendar">
                     <h3>Days Worked</h3>
-                    ${generateCalendarHTML(data.items.reduce((dates, item) => {
-                        const start = new Date(item.startDate);
-                        const end = new Date(item.endDate);
-                        const days = [];
-                        for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-                            days.push(new Date(d));
-                        }
-                        console.log(dates, days);
-                        return [...dates, ...days];
-                    }, []))}
+                    ${generateCalendarHTML(data.items[0].dates.map(date => new Date(date)))}
                 </div>
             </div>
         </body>
@@ -102,7 +90,16 @@ export const generateInvoiceHTML = (data) => {
     `;
 };
 
-export const generateInvoicePreview = (invoice, assignments, companiesData, purchaseOrders, paymentDetails) => {
+export const prepareInvoiceData = (invoice, assignments, companiesData, purchaseOrders, paymentDetails) => {
+    // Sort days and adjust dates by +1
+    const sortedDays = [...invoice.days]
+        .sort((a, b) => new Date(a) - new Date(b))
+        .map(day => {
+            const date = new Date(day);
+            date.setDate(date.getDate() + 1);
+            return date.toISOString().split('T')[0];
+        });
+    
     const filteredAssignments = Object.fromEntries(
         Object.entries(assignments).filter(([date]) => 
             invoice.days.includes(date)
@@ -110,23 +107,29 @@ export const generateInvoicePreview = (invoice, assignments, companiesData, purc
     );
 
     const purchaseOrder = purchaseOrders[invoice.purchaseOrderId];
-    const invoiceData = {
+    const rate = companiesData[invoice.company].rate;
+    
+    return {
         invoiceNumber: invoice.id,
-        company: COMPANY_LABELS[invoice.company] || invoice.company,
-        dateRange: invoice.dateRange,
+        company: invoice.company,
+        dateRange: {
+            start: sortedDays[0],
+            end: sortedDays[sortedDays.length - 1]
+        },
         assignments: filteredAssignments,
-        items: groupConsecutiveDays(
-            invoice.days.map(date => ({
-                date,
-                description: `8 Hour Day`,
-                rate: companiesData[invoice.company].rate,
-                amount: companiesData[invoice.company].rate
-            }))
-        ),
+        items: [{
+            days: invoice.days.length,
+            rate: rate,
+            amount: rate * invoice.days.length,
+            dates: sortedDays
+        }],
         purchaseOrder,
         paymentDetails
     };
+};
 
+export const generateInvoicePreview = (invoice, assignments, companiesData, purchaseOrders, paymentDetails) => {
+    const invoiceData = prepareInvoiceData(invoice, assignments, companiesData, purchaseOrders, paymentDetails);
     const invoiceWindow = window.open('', '_blank');
     invoiceWindow.document.write(generateInvoiceHTML(invoiceData));
 };
