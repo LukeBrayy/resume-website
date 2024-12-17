@@ -5,7 +5,7 @@ import ChatbotInterface from './components/ChatbotInterface';
 import Chat2 from './components/Chat2';
 import SecretSanta from './components/SecretSanta';
 import Rates from './components/Rates';
-
+import TimeseriesViewer from './components/TimeseriesViewer';
 
 const App = () => {
   return (
@@ -16,6 +16,7 @@ const App = () => {
         <Route path="/Chatbot" element={<ChatbotInterface />} />
         <Route path="/Chat2" element={<Chat2 />} />
         <Route path="/rates" element={<Rates />} />
+        <Route path="/charter" element={<TimeseriesViewer />} />
       </Routes>
     </Router>
   );
