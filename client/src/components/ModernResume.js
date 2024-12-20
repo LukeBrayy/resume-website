@@ -147,6 +147,33 @@ const ModernResume = () => {
     },
     {
       id: 8,
+      title: "Hobbies",
+      description: "In my spare time I love camping, 4x4s and riding motorbikes, mountain bikes and horses!",
+      fullWidth: true,
+      component: ImageCarousel,
+      componentProps: {
+        items: [
+          {
+            url: "/camp1.jpg",
+            alt: "Camp with fire and stars"
+          },
+          {
+            url: "/dirtbikes1.jpg",
+            alt: "The boys"
+          },
+          {
+            url: "/dirtbikes2.jpeg",
+            alt: "Pit bike jumps"
+          },
+          {
+            url: "/horse1.jpg",
+            alt: "Libby and Miley Horse Riding"
+          },
+        ]
+      }
+    },
+    {
+      id: 9,
       title: "Secret Santa Webpage",
       description: "Random secret santa solver with set rules for blacklisting pairs, avoiding couple matches and pre-defining some matches.",
       fullWidth: true,
@@ -154,15 +181,7 @@ const ModernResume = () => {
       linkText: "Secret Santa Solver",
       image: "/secretsanta.png",
     },
-    {
-      id: 8,
-      title: "Hobbies",
-      description: "I like 4x4s, camping, dirt biking and squash! Here are some photos of my adventures.",
-      fullWidth: true,
-      link: "https://lukebray.au/SecretSanta",
-      linkText: "Secret Santa Solver",
-      image: "/secretsanta.png",
-    }
+
     // {
     //   id: 8,
     //   title: "Server Hardware Builds",
