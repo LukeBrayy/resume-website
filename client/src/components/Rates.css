@@ -250,3 +250,13 @@ h1 {
     border-radius: 50%;
     display: inline-block;
 }
+
+.notes-container {
+    margin: 20px 0;
+    width: 100%;
+}
+
+.notes-container textarea {
+    resize: vertical;
+    min-height: 100px;
+}

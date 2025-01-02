@@ -16,6 +16,7 @@ import { getDocument, saveDocument } from '../services/firebase';
 import SummaryStats from './SummaryStats';
 import InvoiceGenerator from './InvoiceGenerator/InvoiceGenerator';  // Updated import path
 import PurchaseOrderManager from './PurchaseOrderManager';
+import Notes from './Notes';
 
 ChartJS.register(
   CategoryScale,
@@ -276,6 +277,8 @@ function Rates() {
                 companiesData={companiesData}
                 invoices={invoices}
             />
+
+            <Notes />
         </div>
     );
 }
