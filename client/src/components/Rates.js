@@ -17,6 +17,7 @@ import SummaryStats from './SummaryStats';
 import InvoiceGenerator from './InvoiceGenerator/InvoiceGenerator';  // Updated import path
 import PurchaseOrderManager from './PurchaseOrderManager';
 import Notes from './Notes';
+import PayslipManager from './PayslipManager';
 
 ChartJS.register(
   CategoryScale,
@@ -43,6 +44,7 @@ function Rates() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [purchaseOrders, setPurchaseOrders] = useState({});
     const [invoices, setInvoices] = useState({});
+    const [payslips, setPayslips] = useState({});
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -52,11 +54,12 @@ function Rates() {
 
     const loadData = async () => {
         try {
-            const [calendarDoc, companiesDoc, purchaseOrdersDoc, invoicesDoc] = await Promise.all([
+            const [calendarDoc, companiesDoc, purchaseOrdersDoc, invoicesDoc, payslipsDoc] = await Promise.all([
                 getDocument('calendar', 'assignments'),
                 getDocument('calendar', 'companies'),
                 getDocument('calendar', 'purchaseOrders'),
-                getDocument('calendar', 'invoices')
+                getDocument('calendar', 'invoices'),
+                getDocument('calendar', 'payslips')
             ]);
 
             if (calendarDoc.exists()) {
@@ -79,6 +82,12 @@ function Rates() {
                 setInvoices(invoicesDoc.data().invoices || {});
             } else {
                 await saveDocument('calendar', 'invoices', { invoices: {} });
+            }
+            
+            if (payslipsDoc.exists()) {
+                setPayslips(payslipsDoc.data().payslips || {});
+            } else {
+                await saveDocument('calendar', 'payslips', { payslips: {} });
             }
         } catch (error) {
             console.error("Error loading data:", error);
@@ -121,6 +130,16 @@ function Rates() {
             setInvoices(newInvoices);
         } catch (error) {
             console.error("Error saving invoices:", error);
+        }
+    };
+
+    const savePayslips = async (newPayslips) => {
+        if (!isAuthenticated) return;
+        try {
+            await saveDocument('calendar', 'payslips', { payslips: newPayslips });
+            setPayslips(newPayslips);
+        } catch (error) {
+            console.error("Error saving payslips:", error);
         }
     };
 
@@ -261,6 +280,13 @@ function Rates() {
             <SummaryStats 
                 assignments={assignments}
                 companiesData={companiesData}
+            />
+
+            <PayslipManager
+                assignments={assignments}
+                companiesData={companiesData}
+                payslips={payslips}
+                savePayslips={savePayslips}
             />
 
             <InvoiceGenerator 

@@ -1,0 +1,201 @@
+.payslip-manager {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.payslip-manager h2 {
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.payslip-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.select-container {
+    flex: 1;
+    min-width: 250px;
+}
+
+.select-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.select-container select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    font-size: 14px;
+}
+
+.rate-inputs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: flex-end;
+}
+
+.input-field {
+    flex: 1;
+    min-width: 120px;
+}
+
+.input-field label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.input-field input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    font-size: 14px;
+}
+
+.recalculate-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.payslip-details {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.payslip-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.payslip-header h3 {
+    margin: 0;
+    flex: 1;
+}
+
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 15px;
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+    margin-right: 10px;
+}
+
+.toggle-paid-btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.paid-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.unpaid-btn {
+    background-color: #FF9800;
+    color: white;
+}
+
+.earnings-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.earnings-table th, 
+.earnings-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.earnings-table th {
+    background-color: #eee;
+    font-weight: 600;
+}
+
+.earnings-table tfoot tr {
+    background-color: #f5f5f5;
+}
+
+.earnings-table tfoot td {
+    border-bottom: none;
+}
+
+.super-row {
+    color: #1976D2;
+}
+
+.net-pay-row {
+    font-size: 1.1em;
+    background-color: #e8f5e9;
+}
+
+.payslips-list {
+    margin-top: 30px;
+}
+
+.payslips-list h3 {
+    margin-bottom: 15px;
+}
+
+.payslips-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.payslips-table th, 
+.payslips-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.payslips-table th {
+    background-color: #eee;
+}
+
+.payslips-table tr {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.payslips-table tr:hover {
+    background-color: #f5f5f5;
+}
+
+.status-indicator {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}

@@ -220,3 +220,18 @@ th, td {
         color-adjust: exact;
     }
 }
+
+.gst-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.gst-checkbox input[type="checkbox"] {
+    margin: 0;
+}
+
+.total-row {
+    font-size: 1.1em;
+    background-color: #e9f7f6;
+}

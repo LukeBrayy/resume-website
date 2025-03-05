@@ -49,7 +49,8 @@ export const useInvoices = (invoices, saveInvoices) => {
             status: 'draft',
             amount: amount,
             createdAt: new Date().toISOString(),
-            days: selectedDays
+            days: selectedDays,
+            includeGST: invoiceData.includeGST || false // Add GST flag
         };
         
         console.log('Creating new invoice:', newInvoice); // Debug log
@@ -63,6 +64,9 @@ export const useInvoices = (invoices, saveInvoices) => {
         invoiceData.setInvoiceNumber('');
         invoiceData.setDateRange({ start: '', end: '' });
         invoiceData.setSelectedPurchaseOrder('');
+        if (invoiceData.setIncludeGST) {
+            invoiceData.setIncludeGST(false);
+        }
         
         // Confirmation
         alert('Invoice created successfully!');

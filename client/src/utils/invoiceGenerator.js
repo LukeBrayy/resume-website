@@ -6,8 +6,14 @@ const formatDate = (dateString) => {
     return date.toLocaleDateString('en-AU');
 };
 
+const formatCurrency = (amount) => {
+    return amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+};
+
 export const generateInvoiceHTML = (data) => {
-    const total = data.items.reduce((sum, item) => sum + item.amount, 0);
+    const subtotal = data.items.reduce((sum, item) => sum + item.amount, 0);
+    const gstAmount = data.includeGST ? subtotal * 0.1 : 0;
+    const total = subtotal + gstAmount;
     const poDetails = data.purchaseOrder;
 
     return `
@@ -66,17 +72,25 @@ export const generateInvoiceHTML = (data) => {
                             <td>${formatDate(data.dateRange.start)} - ${formatDate(data.dateRange.end)}</td>
                             <td>Consulting Services</td>
                             <td>${data.items[0].days}</td>
-                            <td>$${data.items[0].rate}</td>
-                            <td>$${data.items[0].amount}</td>
+                            <td>$${formatCurrency(data.items[0].rate)}</td>
+                            <td>$${formatCurrency(data.items[0].amount)}</td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr class="table-footer">
-                            <td colspan="2">Total</td>
-                            <td>${data.items[0].days}</td>
-                            <td></td>
-                            <td>$${total}</td>
+                            <td colspan="4">Subtotal</td>
+                            <td>$${formatCurrency(subtotal)}</td>
                         </tr>
+                        ${data.includeGST ? `
+                        <tr class="table-footer">
+                            <td colspan="4">GST (10%)</td>
+                            <td>$${formatCurrency(gstAmount)}</td>
+                        </tr>
+                        <tr class="table-footer total-row">
+                            <td colspan="4">Total (including GST)</td>
+                            <td>$${formatCurrency(total)}</td>
+                        </tr>
+                        ` : ''}
                     </tfoot>
                 </table>
                 
@@ -124,7 +138,8 @@ export const prepareInvoiceData = (invoice, assignments, companiesData, purchase
             dates: sortedDays
         }],
         purchaseOrder,
-        paymentDetails
+        paymentDetails,
+        includeGST: invoice.includeGST
     };
 };
 

@@ -5,6 +5,7 @@ export const InvoiceForm = ({ assignments, companiesData, purchaseOrders, onCrea
     const [dateRange, setDateRange] = useState({ start: '', end: '' });
     const [selectedPurchaseOrder, setSelectedPurchaseOrder] = useState('');
     const [invoiceNumber, setInvoiceNumber] = useState('');
+    const [includeGST, setIncludeGST] = useState(false);
 
     const handleSubmit = () => {
         onCreateInvoice({
@@ -14,9 +15,11 @@ export const InvoiceForm = ({ assignments, companiesData, purchaseOrders, onCrea
             invoiceNumber,
             assignments,
             companiesData,
+            includeGST,                     // Add GST option
             setInvoiceNumber,
             setDateRange,
             setSelectedPurchaseOrder,
+            setIncludeGST,                  // Add setter for GST
             company: selectedCompany        // adding this for backward compatibility
         });
     };
@@ -59,6 +62,15 @@ export const InvoiceForm = ({ assignments, companiesData, purchaseOrders, onCrea
                         <option key={po.id} value={po.id}>{po.id} - {po.totalAmount}</option>
                 ))}
             </select>
+            <div className="gst-checkbox">
+                <input 
+                    type="checkbox" 
+                    id="includeGST" 
+                    checked={includeGST} 
+                    onChange={(e) => setIncludeGST(e.target.checked)} 
+                />
+                <label htmlFor="includeGST">Include GST (10%)</label>
+            </div>
             <button onClick={handleSubmit}>Create Invoice</button>
         </div>
     );
