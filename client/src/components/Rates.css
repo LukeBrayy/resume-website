@@ -22,7 +22,7 @@
     padding: 20px;
     border-radius: 10px;
     border: none !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .react-calendar__tile {
@@ -38,8 +38,7 @@
     display: flex;
     flex-direction: column;
     font-size: 10px;
-    min-height: 40px;
-    /* Add minimum height */
+    min-height: 40px;  /* Add minimum height */
     justify-content: space-between;
 }
 
@@ -61,7 +60,7 @@
     background: white;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .legend-item {
@@ -115,11 +114,9 @@ h1 {
     background: white;
     padding: 30px;
     border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    /* Make it full width */
-    max-width: 1200px;
-    /* Match container max-width */
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    width: 100%;  /* Make it full width */
+    max-width: 1200px;  /* Match container max-width */
     margin: 30px auto 0;
 }
 
@@ -221,7 +218,7 @@ h1 {
     background: white;
     border-radius: 10px;
     padding: 1.5rem;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
 }
 
 .month-card h3 {
@@ -262,68 +259,4 @@ h1 {
 .notes-container textarea {
     resize: vertical;
     min-height: 100px;
-}
-
-.checkbox-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    cursor: pointer;
-    padding: 12px;
-    border-radius: 8px;
-    transition: background-color 0.2s ease;
-}
-
-.checkbox-item:hover {
-    background: #f8fafc;
-}
-
-.checkbox-item input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    margin: 0;
-    margin-top: 2px;
-    /* Small adjustment for alignment */
-    cursor: pointer;
-    accent-color: #3b82f6;
-    flex-shrink: 0;
-}
-
-/* New styles for checkbox content with URLs */
-.checkbox-content {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    flex: 1;
-}
-
-.checkbox-label {
-    color: #374151;
-    font-weight: 500;
-    line-height: 1.4;
-}
-
-.checkbox-link {
-    color: #3b82f6;
-    text-decoration: none;
-    font-size: 0.8rem;
-    font-weight: 500;
-    padding: 2px 8px;
-    border-radius: 4px;
-    background: #eff6ff;
-    border: 1px solid #dbeafe;
-    transition: all 0.2s ease;
-    align-self: flex-start;
-    display: inline-block;
-}
-
-.checkbox-link:hover {
-    background: #dbeafe;
-    border-color: #3b82f6;
-    text-decoration: none;
-    transform: translateY(-1px);
-}
-
-.checkbox-link:active {
-    transform: translateY(0);
 }
