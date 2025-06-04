@@ -20,7 +20,7 @@ export const db = getFirestore(app);
 setPersistence(auth, browserLocalPersistence);
 
 // Auth helperss
-export const loginWithEmail = (password) => 
+export const loginWithEmail = (password) =>
     signInWithEmailAndPassword(auth, 'mooksnook@gmail.com', password);
 
 export const isAuthenticated = async () => {
@@ -36,13 +36,13 @@ export const isAuthenticated = async () => {
 };
 
 // Firestore helpers
-export const saveDocument = (collection, docId, data) => 
+export const saveDocument = (collection, docId, data) =>
     setDoc(doc(db, collection, docId), {
         ...data,
         lastUpdated: new Date().toISOString()
     });
 
-export const getDocument = (collection, docId) => 
+export const getDocument = (collection, docId) =>
     getDoc(doc(db, collection, docId));
 
 // Add these new helper functions
@@ -54,8 +54,8 @@ export const getCollection = async (collection) => {
     }));
 };
 
-export const updateDocument = (collection, docId, data) => 
+export const updateDocument = (collection, docId, data) =>
     updateDoc(doc(db, collection, docId), data);
 
-export const getSetting = (settingId) => 
+export const getSetting = (settingId) =>
     getDoc(doc(db, 'settings', settingId));

@@ -1,0 +1,574 @@
+/* Force scrolling globally when this component is active */
+body.meeting-notes-active {
+    overflow: auto !important;
+    height: auto !important;
+}
+
+html.meeting-notes-active {
+    overflow: auto !important;
+    height: auto !important;
+}
+
+#root.meeting-notes-active {
+    overflow: visible !important;
+    height: auto !important;
+    min-height: 100vh !important;
+}
+
+.meeting-notes-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    background-color: #f8fafc;
+    min-height: 100vh;
+    width: 100%;
+    overflow: visible !important;
+    position: relative;
+}
+
+/* Authentication Header */
+.auth-header {
+    text-align: center;
+    background: white;
+    border-radius: 12px;
+    padding: 48px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+}
+
+.auth-header h1 {
+    margin: 0 0 16px 0;
+    color: #1a202c;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.auth-header p {
+    margin: 0;
+    color: #64748b;
+    font-size: 1.1rem;
+}
+
+/* Header Styles */
+.meeting-notes-header {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.meeting-notes-header h1 {
+    margin: 0;
+    color: #1a202c;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.auth-status {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.auth-indicator {
+    font-size: 0.875rem;
+    color: #059669;
+    font-weight: 500;
+    background: #d1fae5;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid #a7f3d0;
+}
+
+.logout-button {
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.logout-button:hover {
+    background: #e2e8f0;
+    color: #334155;
+}
+
+.tab-navigation {
+    display: flex;
+    gap: 4px;
+}
+
+.tab-button {
+    padding: 12px 24px;
+    border: none;
+    background: #f1f5f9;
+    color: #64748b;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.tab-button:hover {
+    background: #e2e8f0;
+    color: #475569;
+}
+
+.tab-button.active {
+    background: #3b82f6;
+    color: white;
+}
+
+/* Template Selection */
+.template-selection {
+    background: white;
+    border-radius: 12px;
+    padding: 32px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+}
+
+.template-selection h2 {
+    margin: 0 0 24px 0;
+    color: #1a202c;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.template-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.template-card {
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.template-card:hover {
+    border-color: #3b82f6;
+    background: #eff6ff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.template-card h3 {
+    margin: 0 0 12px 0;
+    color: #1a202c;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.template-card p {
+    margin: 4px 0;
+    color: #64748b;
+    font-size: 0.875rem;
+}
+
+/* Meeting Template */
+.meeting-template {
+    background: white;
+    border-radius: 12px;
+    padding: 32px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+}
+
+.template-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f1f5f9;
+}
+
+.back-button {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #475569;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.back-button:hover {
+    background: #e2e8f0;
+}
+
+.template-header h2 {
+    margin: 0;
+    color: #1a202c;
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+
+.date-input-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.date-input-container label {
+    font-weight: 500;
+    color: #374151;
+}
+
+.date-input {
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.875rem;
+}
+
+/* Template Content */
+.template-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 32px;
+}
+
+/* Remove any max-height restrictions that prevent natural page scrolling */
+
+/* ...existing code... */
+
+.checklist-section h3,
+.notes-section h3 {
+    margin: 0 0 20px 0;
+    color: #1a202c;
+    font-size: 1.25rem;
+    font-weight: 600;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #f1f5f9;
+}
+
+/* Checkbox Styles */
+.checkbox-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+    padding: 12px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.checkbox-item:hover {
+    background: #f8fafc;
+}
+
+.checkbox-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    cursor: pointer;
+    accent-color: #3b82f6;
+}
+
+.checkbox-label {
+    color: #374151;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+/* Text Fields */
+.text-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.text-field-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.field-label {
+    font-weight: 600;
+    color: #374151;
+    font-size: 0.875rem;
+}
+
+.text-field {
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.875rem;
+    resize: vertical;
+    min-height: 80px;
+    transition: border-color 0.2s ease;
+}
+
+.text-field:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Actions */
+.template-actions {
+    text-align: center;
+    padding-top: 24px;
+    border-top: 2px solid #f1f5f9;
+}
+
+.save-button {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.save-button:hover:not(:disabled) {
+    background: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.save-button:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Meeting History */
+.meeting-history {
+    background: white;
+    border-radius: 12px;
+    padding: 32px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+}
+
+.meeting-history h2 {
+    margin: 0 0 24px 0;
+    color: #1a202c;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #64748b;
+}
+
+.history-content {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 32px;
+}
+
+@media (max-width: 768px) {
+    .history-content {
+        grid-template-columns: 1fr;
+    }
+
+    .template-content {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .header-content {
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+    }
+
+    .auth-status {
+        align-self: flex-end;
+    }
+}
+
+.meetings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+.meeting-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.meeting-card:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+}
+
+.meeting-card.selected {
+    background: #eff6ff;
+    border-color: #3b82f6;
+}
+
+.meeting-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+}
+
+.meeting-card-header h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a202c;
+}
+
+.meeting-date {
+    font-size: 0.75rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.meeting-card-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.completion-rate {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #059669;
+}
+
+.meeting-meta {
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+/* Meeting Details */
+.meeting-details {
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 24px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.meeting-details-header {
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.meeting-details-header h3 {
+    margin: 0 0 8px 0;
+    color: #1a202c;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.meeting-details-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.checklist-review h4,
+.notes-review h4 {
+    margin: 0 0 16px 0;
+    color: #374151;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.checkbox-review-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.checkbox-status {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+.checkbox-status.completed {
+    background: #059669;
+    color: white;
+}
+
+.checkbox-status.incomplete {
+    background: #e5e7eb;
+    color: #9ca3af;
+}
+
+.checkbox-text {
+    color: #374151;
+    font-size: 0.875rem;
+}
+
+.note-review-item {
+    margin-bottom: 16px;
+}
+
+.note-review-item h5 {
+    margin: 0 0 8px 0;
+    color: #374151;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.note-review-item p {
+    margin: 0;
+    color: #4b5563;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    background: white;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+}

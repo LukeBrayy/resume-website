@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { format, startOfYear, addDays, eachDayOfInterval, isSameDay } from 'date-fns';
 import './PayslipManager.css';
+import PayslipPrint from './PayslipPrint';
 
 const PayslipManager = ({ assignments, companiesData, payslips, savePayslips }) => {
     const [selectedPeriod, setSelectedPeriod] = useState(null);
@@ -9,6 +10,7 @@ const PayslipManager = ({ assignments, companiesData, payslips, savePayslips }) 
     const [periods, setPeriods] = useState([]);
     const [activePayslip, setActivePayslip] = useState(null);
     const [showDetails, setShowDetails] = useState(false);
+    const [showPrintView, setShowPrintView] = useState(false);
 
     // Generate fortnightly periods for the current year
     useEffect(() => {
@@ -150,6 +152,10 @@ const PayslipManager = ({ assignments, companiesData, payslips, savePayslips }) 
         setActivePayslip(updatedPayslip);
     };
 
+    const togglePrintView = () => {
+        setShowPrintView(!showPrintView);
+    };
+
     return (
         <div className="payslip-manager">
             <h2>Fortnightly Payslip Manager</h2>
@@ -209,50 +215,65 @@ const PayslipManager = ({ assignments, companiesData, payslips, savePayslips }) 
                         >
                             Mark as {activePayslip.isPaid ? 'Unpaid' : 'Paid'}
                         </button>
+                        <button 
+                            className="print-view-btn" 
+                            onClick={togglePrintView}
+                            style={{ marginLeft: '10px', backgroundColor: '#2196F3', color: 'white', padding: '8px 12px', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
+                        >
+                            {showPrintView ? 'Hide Print View' : 'Show Print View'}
+                        </button>
                     </div>
                     
-                    <div className="payslip-summary">
-                        <table className="earnings-table">
-                            <thead>
-                                <tr>
-                                    <th>Company</th>
-                                    <th>Days</th>
-                                    <th>Daily Rate</th>
-                                    <th>Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {Object.entries(activePayslip.earnings).map(([company, data]) => (
-                                    data.days > 0 ? (
-                                        <tr key={company}>
-                                            <td>{company}</td>
-                                            <td>{data.days}</td>
-                                            <td>${companiesData[company].rate.toFixed(2)}</td>
-                                            <td>${data.amount.toFixed(2)}</td>
-                                        </tr>
-                                    ) : null
-                                ))}
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colSpan="3"><strong>Gross Pay</strong></td>
-                                    <td><strong>${activePayslip.totalGross.toFixed(2)}</strong></td>
-                                </tr>
-                                <tr>
-                                    <td colSpan="3">Tax ({activePayslip.taxPercentage}%)</td>
-                                    <td>-${activePayslip.taxAmount.toFixed(2)}</td>
-                                </tr>
-                                <tr className="super-row">
-                                    <td colSpan="3">Superannuation ({activePayslip.superPercentage}%)</td>
-                                    <td>-${activePayslip.superAmount.toFixed(2)}</td>
-                                </tr>
-                                <tr className="net-pay-row">
-                                    <td colSpan="3"><strong>Net Pay</strong></td>
-                                    <td><strong>${activePayslip.netPay.toFixed(2)}</strong></td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
+                    {!showPrintView ? (
+                        <div className="payslip-summary">
+                            <table className="earnings-table">
+                                <thead>
+                                    <tr>
+                                        <th>Company</th>
+                                        <th>Days</th>
+                                        <th>Daily Rate</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {Object.entries(activePayslip.earnings).map(([company, data]) => (
+                                        data.days > 0 ? (
+                                            <tr key={company}>
+                                                <td>{company}</td>
+                                                <td>{data.days}</td>
+                                                <td>${companiesData[company].rate.toFixed(2)}</td>
+                                                <td>${data.amount.toFixed(2)}</td>
+                                            </tr>
+                                        ) : null
+                                    ))}
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colSpan="3"><strong>Gross Pay</strong></td>
+                                        <td><strong>${activePayslip.totalGross.toFixed(2)}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td colSpan="3">Tax ({activePayslip.taxPercentage}%)</td>
+                                        <td>-${activePayslip.taxAmount.toFixed(2)}</td>
+                                    </tr>
+                                    <tr className="super-row">
+                                        <td colSpan="3">Superannuation ({activePayslip.superPercentage}%)</td>
+                                        <td>-${activePayslip.superAmount.toFixed(2)}</td>
+                                    </tr>
+                                    <tr className="net-pay-row">
+                                        <td colSpan="3"><strong>Net Pay</strong></td>
+                                        <td><strong>${activePayslip.netPay.toFixed(2)}</strong></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    ) : (
+                        <PayslipPrint 
+                            payslipData={activePayslip} 
+                            companiesData={companiesData}
+                            onPrint={() => setShowPrintView(false)}
+                        />
+                    )}
                 </div>
             )}
             
@@ -280,6 +301,7 @@ const PayslipManager = ({ assignments, companiesData, payslips, savePayslips }) 
                                         setTaxPercentage(payslip.taxPercentage);
                                         setSuperPercentage(payslip.superPercentage);
                                         setShowDetails(true);
+                                        setShowPrintView(false);
                                     }
                                 }}>
                                     <td>{periodLabel}</td>
