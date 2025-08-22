@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Squash League Manager</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Squash Pennants Team Manager</h1>
+            <div class="week-selector">
+                <button onclick="changeWeek(-1)">← Previous Week</button>
+                <div class="week-display" id="weekDisplay">Week 1 - January 6-12, 2025</div>
+                <button onclick="changeWeek(1)">Next Week →</button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="schedule-section">
+                <h2 class="section-title">Match Schedule</h2>
+                <div id="matchSchedule"></div>
+            </div>
+
+            <div class="sidebar">
+                <div class="sidebar-card bye-team">
+                    <h3 class="section-title">BYE Week Team</h3>
+                    <div id="byeTeam"></div>
+                </div>
+
+                <div class="sidebar-card">
+                    <h3 class="section-title">Fill-in Pool</h3>
+                    <ul class="player-list" id="fillInPool"></ul>
+                </div>
+
+                <div class="sidebar-card">
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" onclick="showAvailabilityManager()">Manage Availability</button>
+                        <button class="btn btn-success" onclick="showTeamManager()">Team Manager</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fill-in Selection Modal -->
+    <div id="fillInModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Select Fill-in Player</h3>
+                <span class="close-btn" onclick="closeModal('fillInModal')">&times;</span>
+            </div>
+            <div id="fillInSuggestions"></div>
+        </div>
+    </div>
+
+    <!-- Availability Manager Modal -->
+    <div id="availabilityModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Manage Availability</h3>
+                <span class="close-btn" onclick="closeModal('availabilityModal')">&times;</span>
+            </div>
+            <div class="availability-controls" style="margin-bottom: 20px; text-align: center;">
+                <label for="availabilityWeekSelect"
+                    style="margin-right: 10px; display: block; margin-bottom: 10px;">Select Week:</label>
+                <select id="availabilityWeekSelect" onchange="updateAvailabilityView()"
+                    style="padding: 8px 12px; margin-right: 20px; margin-bottom: 15px; font-size: 16px; border: 2px solid var(--border); border-radius: 5px;">
+                    <option value="1">Week 1</option>
+                    <option value="2">Week 2</option>
+                    <option value="3">Week 3</option>
+                    <option value="4">Week 4</option>
+                    <option value="5">Week 5</option>
+                    <option value="6">Week 6</option>
+                    <option value="7">Week 7</option>
+                </select>
+                <div class="button-group" style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+                    <button onclick="toggleAllPlayersForWeek(true)"
+                        style="padding: 12px 20px; background: var(--success); color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; min-height: 44px;">Set
+                        All Available</button>
+                    <button onclick="toggleAllPlayersForWeek(false)"
+                        style="padding: 12px 20px; background: var(--danger); color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; min-height: 44px;">Set
+                        All Unavailable</button>
+                </div>
+            </div>
+            <div id="availabilityContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // Mock data structure - now with weekly availability
+        let currentWeek = 1;
+        const teams = [
+            {
+                id: 1, name: "Thunder", players: [
+                    { id: 101, name: "Alex Johnson", level: 2650, availability: { 1: true, 2: true, 3: true, 4: false, 5: true, 6: true, 7: true } },
+                    { id: 102, name: "Sarah Chen", level: 2300, availability: { 1: true, 2: true, 3: false, 4: true, 5: true, 6: true, 7: true } },
+                    { id: 103, name: "Mike Wilson", level: 2100, availability: { 1: false, 2: true, 3: true, 4: true, 5: false, 6: true, 7: true } },
+                    { id: 104, name: "Emma Davis", level: 1950, availability: { 1: true, 2: false, 3: true, 4: true, 5: true, 6: false, 7: true } }
+                ]
+            },
+            {
+                id: 2, name: "Lightning", players: [
+                    { id: 201, name: "James Smith", level: 2500, availability: { 1: true, 2: true, 3: true, 4: true, 5: true, 6: true, 7: false } },
+                    { id: 202, name: "Lisa Wong", level: 2250, availability: { 1: true, 2: true, 3: true, 4: false, 5: true, 6: true, 7: true } },
+                    { id: 203, name: "David Brown", level: 2050, availability: { 1: true, 2: false, 3: true, 4: true, 5: true, 6: true, 7: true } },
+                    { id: 204, name: "Amy Taylor", level: 1900, availability: { 1: true, 2: true, 3: true, 4: true, 5: false, 6: true, 7: true } }
+                ]
+            },
+            {
+                id: 3, name: "Storm", players: [
+                    { id: 301, name: "Robert Lee", level: 2600, availability: { 1: true, 2: true, 3: true, 4: true, 5: true, 6: false, 7: true } },
+                    { id: 302, name: "Maria Garcia", level: 2200, availability: { 1: false, 2: true, 3: false, 4: true, 5: true, 6: true, 7: true } },
+                    { id: 303, name: "Tom Anderson", level: 2000, availability: { 1: true, 2: true, 3: true, 4: true, 5: true, 6: true, 7: false } },
+                    { id: 304, name: "Jane Martinez", level: 1800, availability: { 1: true, 2: true, 3: true, 4: false, 5: true, 6: true, 7: true } }
+                ]
+            },
+            {
+                id: 4, name: "Cyclone", players: [
+                    { id: 401, name: "Chris Evans", level: 2400, availability: { 1: true, 2: true, 3: true, 4: true, 5: false, 6: true, 7: true } },
+                    { id: 402, name: "Diana Prince", level: 2100, availability: { 1: true, 2: false, 3: true, 4: true, 5: true, 6: true, 7: false } },
+                    { id: 403, name: "Kevin Hart", level: 1950, availability: { 1: true, 2: true, 3: false, 4: true, 5: true, 6: true, 7: true } },
+                    { id: 404, name: "Nina Patel", level: 1750, availability: { 1: false, 2: true, 3: true, 4: true, 5: true, 6: false, 7: true } }
+                ]
+            },
+            {
+                id: 5, name: "Hurricane", players: [
+                    { id: 501, name: "Steve Rogers", level: 2700, availability: { 1: true, 2: true, 3: true, 4: true, 5: true, 6: true, 7: true } },
+                    { id: 502, name: "Natasha Romano", level: 2300, availability: { 1: true, 2: true, 3: false, 4: true, 5: true, 6: true, 7: false } },
+                    { id: 503, name: "Bruce Banner", level: 2050, availability: { 1: true, 2: true, 3: true, 4: false, 5: true, 6: true, 7: true } },
+                    { id: 504, name: "Wanda Max", level: 1900, availability: { 1: true, 2: false, 3: true, 4: true, 5: true, 6: true, 7: true } }
+                ]
+            },
+            {
+                id: 6, name: "Tornado", players: [
+                    { id: 601, name: "Tony Stark", level: 2500, availability: { 1: false, 2: true, 3: true, 4: true, 5: true, 6: true, 7: false } },
+                    { id: 602, name: "Pepper Potts", level: 2200, availability: { 1: true, 2: true, 3: true, 4: false, 5: true, 6: false, 7: true } },
+                    { id: 603, name: "Happy Hogan", level: 2000, availability: { 1: true, 2: true, 3: false, 4: true, 5: true, 6: true, 7: true } },
+                    { id: 604, name: "Morgan Stark", level: 1650, availability: { 1: true, 2: true, 3: true, 4: true, 5: false, 6: true, 7: true } }
+                ]
+            },
+            {
+                id: 7, name: "Blizzard", players: [
+                    { id: 701, name: "Peter Parker", level: 2300, availability: { 1: true, 2: true, 3: true, 4: true, 5: true, 6: true, 7: false } },
+                    { id: 702, name: "MJ Watson", level: 2050, availability: { 1: true, 2: false, 3: true, 4: true, 5: true, 6: true, 7: true } },
+                    { id: 703, name: "Ned Leeds", level: 1900, availability: { 1: true, 2: true, 3: true, 4: false, 5: true, 6: false, 7: true } },
+                    { id: 704, name: "May Parker", level: 1600, availability: { 1: true, 2: true, 3: false, 4: true, 5: true, 6: true, 7: true } }
+                ]
+            }
+        ];
+
+        const fillInPool = [
+            { id: 801, name: "John Reserve", level: 2250, availability: { 1: true, 2: true, 3: true, 4: false, 5: true, 6: true, 7: true } },
+            { id: 802, name: "Sally Backup", level: 2000, availability: { 1: true, 2: false, 3: true, 4: true, 5: true, 6: true, 7: true } },
+            { id: 803, name: "Mark Substitute", level: 1800, availability: { 1: true, 2: true, 3: true, 4: true, 5: false, 6: true, 7: false } },
+            { id: 804, name: "Lucy Standby", level: 1750, availability: { 1: false, 2: true, 3: true, 4: true, 5: true, 6: true, 7: true } },
+            { id: 805, name: "Paul Emergency", level: 2500, availability: { 1: true, 2: true, 3: false, 4: true, 5: true, 6: false, 7: true } }
+        ];
+
+        // Schedule rotation (which teams play each week)
+        const scheduleRotation = [
+            { bye: 7, matches: [[1, 2], [3, 4], [5, 6]] },
+            { bye: 6, matches: [[7, 1], [2, 3], [4, 5]] },
+            { bye: 5, matches: [[6, 7], [1, 2], [3, 4]] },
+            { bye: 4, matches: [[5, 6], [7, 1], [2, 3]] },
+            { bye: 3, matches: [[4, 5], [6, 7], [1, 2]] },
+            { bye: 2, matches: [[3, 4], [5, 6], [7, 1]] },
+            { bye: 1, matches: [[2, 3], [4, 5], [6, 7]] }
+        ];
+
+        let fillIns = {};
+
+        function isPlayerAvailable(player, week) {
+            return player.availability[week] !== false; // Default to true if not specified
+        }
+
+        function getWeekSchedule(week) {
+            const rotation = scheduleRotation[(week - 1) % 7];
+            return rotation;
+        }
+
+        function renderSchedule() {
+            const schedule = getWeekSchedule(currentWeek);
+            const matchScheduleDiv = document.getElementById('matchSchedule');
+            matchScheduleDiv.innerHTML = '';
+
+            schedule.matches.forEach(([team1Id, team2Id]) => {
+                const team1 = teams.find(t => t.id === team1Id);
+                const team2 = teams.find(t => t.id === team2Id);
+
+                const matchCard = document.createElement('div');
+                matchCard.className = 'match-card';
+
+                const hasUnavailable = team1.players.some(p => !isPlayerAvailable(p, currentWeek)) ||
+                    team2.players.some(p => !isPlayerAvailable(p, currentWeek));
+
+                matchCard.innerHTML = `
+                    <div class="match-header">
+                        <div class="team-names">${team1.name} vs ${team2.name}</div>
+                        <div class="match-status ${hasUnavailable ? 'status-pending' : 'status-confirmed'}">
+                            ${hasUnavailable ? 'Pending Fill-ins' : 'Confirmed'}
+                        </div>
+                    </div>
+                    <div class="player-matchups">
+                        ${renderPlayerMatchups(team1, team2)}
+                    </div>
+                `;
+
+                matchScheduleDiv.appendChild(matchCard);
+            });
+        }
+
+        function renderPlayerMatchups(team1, team2) {
+            let html = '';
+            for (let i = 0; i < 4; i++) {
+                const player1 = team1.players[i];
+                const player2 = team2.players[i];
+                const fillIn1 = fillIns[`${currentWeek}-${player1.id}`];
+                const fillIn2 = fillIns[`${currentWeek}-${player2.id}`];
+
+                html += `
+                    <div class="player-matchup">
+                        <div class="player-info ${!isPlayerAvailable(player1, currentWeek) && !fillIn1 ? 'unavailable-player' : ''}">
+                            <span class="player-name">
+                                ${fillIn1 ? fillIn1.name : player1.name}
+                            </span>
+                            <span class="player-level">${fillIn1 ? fillIn1.level : player1.level}</span>
+                            ${fillIn1 ? '<span class="fill-in-indicator">FILL-IN</span>' : ''}
+                            ${!isPlayerAvailable(player1, currentWeek) && !fillIn1 ?
+                        `<button onclick="selectFillIn(${player1.id}, ${player1.level})" 
+                                    style="margin-left: 10px; padding: 8px 12px; 
+                                    background: var(--warning); color: white; 
+                                    border: none; border-radius: 5px; cursor: pointer;
+                                    min-height: 44px; font-size: 14px;">
+                                    Find Fill-in
+                                </button>` : ''}
+                        </div>
+                        <span class="vs-divider">VS</span>
+                        <div class="player-info ${!isPlayerAvailable(player2, currentWeek) && !fillIn2 ? 'unavailable-player' : ''}">
+                            <span class="player-name">
+                                ${fillIn2 ? fillIn2.name : player2.name}
+                            </span>
+                            <span class="player-level">${fillIn2 ? fillIn2.level : player2.level}</span>
+                            ${fillIn2 ? '<span class="fill-in-indicator">FILL-IN</span>' : ''}
+                            ${!isPlayerAvailable(player2, currentWeek) && !fillIn2 ?
+                        `<button onclick="selectFillIn(${player2.id}, ${player2.level})" 
+                                    style="margin-left: 10px; padding: 8px 12px; 
+                                    background: var(--warning); color: white; 
+                                    border: none; border-radius: 5px; cursor: pointer;
+                                    min-height: 44px; font-size: 14px;">
+                                    Find Fill-in
+                                </button>` : ''}
+                        </div>
+                    </div>
+                `;
+            }
+            return html;
+        }
+
+        function renderByeTeam() {
+            const schedule = getWeekSchedule(currentWeek);
+            const byeTeam = teams.find(t => t.id === schedule.bye);
+            const byeTeamDiv = document.getElementById('byeTeam');
+
+            byeTeamDiv.innerHTML = `
+                <h4 style="color: white; margin-bottom: 15px;">${byeTeam.name}</h4>
+                <ul class="player-list">
+                    ${byeTeam.players.map(player => `
+                        <li>
+                            <span>${player.name} (${player.level})</span>
+                            <span class="${isPlayerAvailable(player, currentWeek) ? 'available-indicator' : 'unavailable-indicator'}"></span>
+                        </li>
+                    `).join('')}
+                </ul>
+            `;
+        }
+
+        function renderFillInPool() {
+            const poolDiv = document.getElementById('fillInPool');
+            poolDiv.innerHTML = fillInPool.map(player => `
+                <li>
+                    <span>${player.name} (${player.level})</span>
+                    <span class="${isPlayerAvailable(player, currentWeek) ? 'available-indicator' : 'unavailable-indicator'}"></span>
+                </li>
+            `).join('');
+        }
+
+        function selectFillIn(playerId, playerLevel) {
+            const modal = document.getElementById('fillInModal');
+            const suggestionsDiv = document.getElementById('fillInSuggestions');
+
+            // Get BYE team players and fill-in pool
+            const schedule = getWeekSchedule(currentWeek);
+            const byeTeam = teams.find(t => t.id === schedule.bye);
+
+            const availablePlayers = [
+                ...byeTeam.players.filter(p => isPlayerAvailable(p, currentWeek)),
+                ...fillInPool.filter(p => isPlayerAvailable(p, currentWeek))
+            ];
+
+            // Sort by closest level match
+            availablePlayers.sort((a, b) => {
+                const diffA = Math.abs(a.level - playerLevel);
+                const diffB = Math.abs(b.level - playerLevel);
+                return diffA - diffB;
+            });
+
+            suggestionsDiv.innerHTML = `
+                <p style="margin-bottom: 20px;">Selecting fill-in for player with level ${playerLevel}</p>
+                ${availablePlayers.map(player => `
+                    <div class="fill-in-suggestion" onclick="assignFillIn(${playerId}, ${player.id}, '${player.name}', ${player.level})">
+                        <div class="suggestion-header">
+                            <strong>${player.name}</strong>
+                            <span class="player-level">${player.level}</span>
+                        </div>
+                        <div class="player-stats">
+                            Level difference: ${Math.abs(player.level - playerLevel).toFixed(1)}
+                        </div>
+                    </div>
+                `).join('')}
+            `;
+
+            modal.classList.add('active');
+        }
+
+        function assignFillIn(originalPlayerId, fillInId, fillInName, fillInLevel) {
+            fillIns[`${currentWeek}-${originalPlayerId}`] = {
+                id: fillInId,
+                name: fillInName,
+                level: fillInLevel
+            };
+
+            closeModal('fillInModal');
+            renderSchedule();
+        }
+
+        function showAvailabilityManager() {
+            const modal = document.getElementById('availabilityModal');
+
+            // Set the week selector to the current week
+            document.getElementById('availabilityWeekSelect').value = currentWeek;
+
+            // Update the view for the current week
+            updateAvailabilityView();
+
+            modal.classList.add('active');
+        }
+
+        function updateAvailabilityView() {
+            const selectedWeek = parseInt(document.getElementById('availabilityWeekSelect').value);
+            const content = document.getElementById('availabilityContent');
+
+            content.innerHTML = `
+                <p style="margin-bottom: 20px;">Toggle player availability for Week ${selectedWeek}:</p>
+                ${teams.map(team => `
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="color: var(--primary); margin-bottom: 10px;">${team.name}</h4>
+                        ${team.players.map(player => `
+                            <div style="padding: 12px; background: var(--light); margin: 8px 0; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                                <span style="font-weight: 500;">${player.name} (${player.level})</span>
+                                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; min-height: 44px;">
+                                    <input type="checkbox" ${isPlayerAvailable(player, selectedWeek) ? 'checked' : ''} 
+                                           onchange="toggleAvailability(${team.id}, ${player.id}, ${selectedWeek})"
+                                           style="width: 22px; height: 22px; cursor: pointer;">
+                                    <span style="font-size: 14px;">${isPlayerAvailable(player, selectedWeek) ? 'Available' : 'Unavailable'}</span>
+                                </label>
+                            </div>
+                        `).join('')}
+                    </div>
+                `).join('')}
+                
+                <div style="margin-top: 30px; border-top: 1px solid #ddd; padding-top: 20px;">
+                    <h4 style="color: var(--primary); margin-bottom: 10px;">Fill-in Pool</h4>
+                    ${fillInPool.map(player => `
+                        <div style="padding: 12px; background: var(--light); margin: 8px 0; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                            <span style="font-weight: 500;">${player.name} (${player.level})</span>
+                            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; min-height: 44px;">
+                                <input type="checkbox" ${isPlayerAvailable(player, selectedWeek) ? 'checked' : ''} 
+                                       onchange="toggleFillInAvailability(${player.id}, ${selectedWeek})"
+                                       style="width: 22px; height: 22px; cursor: pointer;">
+                                <span style="font-size: 14px;">${isPlayerAvailable(player, selectedWeek) ? 'Available' : 'Unavailable'}</span>
+                            </label>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function toggleAvailability(teamId, playerId, week) {
+            const team = teams.find(t => t.id === teamId);
+            const player = team.players.find(p => p.id === playerId);
+
+            // Toggle availability for the specific week
+            player.availability[week] = !player.availability[week];
+
+            // Clear any fill-in for this player if they become available
+            if (player.availability[week]) {
+                delete fillIns[`${week}-${playerId}`];
+            }
+
+            // If we're changing availability for the current week, update the schedule display
+            if (week === currentWeek) {
+                renderSchedule();
+                renderByeTeam();
+            }
+
+            // Update the availability view to reflect the change
+            updateAvailabilityView();
+        }
+
+        function toggleFillInAvailability(playerId, week) {
+            const player = fillInPool.find(p => p.id === playerId);
+
+            // Toggle availability for the specific week
+            player.availability[week] = !player.availability[week];
+
+            // If we're changing availability for the current week, update the fill-in pool display
+            if (week === currentWeek) {
+                renderFillInPool();
+            }
+
+            // Update the availability view to reflect the change
+            updateAvailabilityView();
+        }
+
+        function toggleAllPlayersForWeek(available) {
+            const selectedWeek = parseInt(document.getElementById('availabilityWeekSelect').value);
+
+            // Set availability for all team players
+            teams.forEach(team => {
+                team.players.forEach(player => {
+                    player.availability[selectedWeek] = available;
+
+                    // Clear fill-ins if player becomes available
+                    if (available) {
+                        delete fillIns[`${selectedWeek}-${player.id}`];
+                    }
+                });
+            });
+
+            // Set availability for all fill-in pool players
+            fillInPool.forEach(player => {
+                player.availability[selectedWeek] = available;
+            });
+
+            // If we're changing availability for the current week, update displays
+            if (selectedWeek === currentWeek) {
+                renderSchedule();
+                renderByeTeam();
+                renderFillInPool();
+            }
+
+            // Update the availability view
+            updateAvailabilityView();
+        }
+
+        function showTeamManager() {
+            alert('Team Manager feature coming soon! This will allow captains to manage rosters, approve fill-ins, and view team statistics.');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function changeWeek(direction) {
+            currentWeek = ((currentWeek - 1 + direction + 7) % 7) + 1;
+            updateWeekDisplay();
+            renderSchedule();
+            renderByeTeam();
+            renderFillInPool();
+        }
+
+        function updateWeekDisplay() {
+            const weekDisplay = document.getElementById('weekDisplay');
+            const weekStart = new Date(2025, 0, 6 + (currentWeek - 1) * 7);
+            const weekEnd = new Date(weekStart);
+            weekEnd.setDate(weekEnd.getDate() + 6);
+
+            const options = { month: 'long', day: 'numeric' };
+            weekDisplay.textContent = `Week ${currentWeek} - ${weekStart.toLocaleDateString('en-US', options)}-${weekEnd.getDate()}, 2025`;
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function () {
+            renderSchedule();
+            renderByeTeam();
+            renderFillInPool();
+            updateWeekDisplay();
+        });
+
+        // Close modals when clicking outside
+        window.onclick = function (event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        }
+    </script>
+</body>
+
+</html>
